@@ -25,7 +25,10 @@ class _MyAppState extends State<MyApp> {
     String platformVersion;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      platformVersion = await FlutterHealth.platformVersion;
+      platformVersion = await FlutterHealth.checkIfHealthDataAvailable(context);
+      Future.delayed(Duration(milliseconds: 100), () async {
+        await FlutterHealth.requestAuthorization(context);
+      });
     } on PlatformException {
       platformVersion = 'Failed to get platform version.';
     }
