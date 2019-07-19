@@ -1,8 +1,8 @@
 name: flutter_health
-description: One library that combines Google Fit from Android and Apple Health from iOS
-version: 0.0.1
-author:
-homepage:
+description: AppleHealthKit library that support most of the values provided.
+version: 0.1.2
+authors: [Bulent Hacioglu <buelent.hacioglu@petleo.net>, Karim Abdo <karim.abdo@petleo.net>]
+homepage: https://gitlab.com/petleo-and-iatros-opensource/flutter_health
 
 environment:
   sdk: ">=2.1.0 <3.0.0"

@@ -14,7 +14,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _healthKitOutput;
   var _dataList = List<HKHealthData>();
-  bool _isAuthorized = false;
+  bool _isAuthorized = true;
 
   @override
   void initState() {
@@ -25,15 +25,41 @@ class _MyAppState extends State<MyApp> {
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initPlatformState() async {
     Future.delayed(Duration(seconds: 2), () async {
-      _healthKitOutput = await FlutterHealth.checkIfHealthDataAvailable(context);
+      _healthKitOutput = await FlutterHealth.checkIfHealthDataAvailable();
       setState(() {});
     });
 
     DateTime startDate = DateTime.utc(2018);
     DateTime endDate = DateTime.now();
     Future.delayed(Duration(seconds: 2), () async {
-      _isAuthorized = await FlutterHealth.requestAuthorization(context);
-      if (_isAuthorized) _dataList = await FlutterHealth.getHeartRate(context, startDate, endDate);
+      _isAuthorized = await FlutterHealth.requestAuthorization();
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyFat(startDate, endDate));
+      setState(() {});
+      /*if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
+      setState(() {});
+      */if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyMass(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getWaistCircumference(startDate, endDate));
+      setState(() {});
+      //if (_isAuthorized) _dataList.addAll(await FlutterHealth.getStepCount(startDate, endDate));
+      //setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBasalEnergyBurned(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getActiveEnergyBurned(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeartRate(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getRestingHeartRate(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getWalkingHeartRate(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyTemperature(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodPressureSys(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodPressureDia(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodOxygen(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodGlucose(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getElectrodermalActivity(startDate, endDate));
       setState(() {});
     });
 
@@ -55,14 +81,15 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text('Running on: $_healthKitOutput\n'),
-              Text('Running on: ${_dataList.length > 0 ? _dataList[0].value : _dataList.length}\n'),
-            ],
-          ),
-        ),
+        body: _dataList.isEmpty
+            ? Text('Running on: $_healthKitOutput\n')
+            : ListView.builder(
+                itemCount: _dataList.length,
+                itemBuilder: (_, index) => ListTile(
+                      title: Text(_dataList[index].value.toString()),
+                      trailing: Text(_dataList[index].unit),
+                      subtitle: Text(DateTime.fromMillisecondsSinceEpoch(_dataList[index].dateFrom).toIso8601String()),
+                    )),
       ),
     );
   }

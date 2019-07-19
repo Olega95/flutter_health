@@ -1,6 +1,6 @@
 # flutter_health
 
-One library that combines Google Fit from Android and Apple Health from iOS
+AppleHealthKit library that support most of the values provided.
 
 ## Getting Started
 

@@ -18,8 +18,23 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
             result("Matomo:: HealthKit available.")
         }
     } else if(call.method.elementsEqual("requestAuthorization")){
+        var heartRateEventTypes = Set<HKSampleType>()
+        if #available(iOS 12.2, *){
+            heartRateEventTypes =  Set([
+                HKSampleType.categoryType(forIdentifier: .highHeartRateEvent)!,
+                HKSampleType.categoryType(forIdentifier: .lowHeartRateEvent)!,
+                HKSampleType.categoryType(forIdentifier: .irregularHeartRhythmEvent)!,
+               ])
+//            healthStore.requestAuthorization(toShare: nil, read: heartRateEventTypes) { (success, error) in
+//                if !success {
+//                    result(false)// Handle the error here.
+//                } else{
+//                    result(true)
+//                }
+//            }
+        }
         if #available(iOS 11.0, *) {
-            let allTypes = Set([
+            let allTypes = heartRateEventTypes.union(Set([
                 HKObjectType.workoutType(),
                 HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!,
                 HKSampleType.quantityType(forIdentifier: .height)!,
@@ -37,7 +52,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
                 HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                 HKSampleType.quantityType(forIdentifier: .electrodermalActivity)!,
-                ])
+                ]))
             healthStore.requestAuthorization(toShare: nil, read: allTypes) { (success, error) in
                 if !success {
                     result(false)// Handle the error here.
@@ -46,7 +61,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 }
             }
         } else {
-            // Fallback on earlier versions
+            result(false)// Handle the error here.
         }
         
         
@@ -86,69 +101,37 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 print("DATA TYPE IS ", dataType)
                 let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
                 print("PREDICATE ", predicate)
-                
+                if (self.healthStore.authorizationStatus(for: dataType) == .sharingAuthorized) {
+                    
+                }
+
                 let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
 
                 
                 let query = HKSampleQuery(sampleType: dataType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sortDescriptor]) {
-                    _, samplesOrNil, error in
+                    x, samplesOrNil, error in
                     
-                    print("BEFORE GUARD")
-
                     guard let samples = samplesOrNil as? [HKQuantitySample] else {
-                        print("SAMPLES NULL")
                         result(FlutterError(code: "FlutterHealth", message: "Results are null", details: error))
                         return
                     }
-                    print(samples)
+
+                    if(samples != nil){
                     result(samples.map { sample -> NSDictionary in
-                        print(sample.quantity.doubleValue(for: HKUnit.init(from: "count/min")))
+                        let unit = self.unitFromDartType(type: index)
                         return [
-                            "value": sample.quantity.doubleValue(for: HKUnit.init(from: "count/min")),
+                            "value": sample.quantity.doubleValue(for: unit),
+                            "unit": unit.unitString,
                             "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                             "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
                         ]
                     })
+                    } else {
+                        print("Either there are no values or the user did not allow getting this value")
+                        result("Either there are no values or the user did not allow getting this value")
+                    }
                     return
                 }
-                
-                
-                
-                
-                
-                
-                
-                
-                
-                
-//
-//                let query = HKSampleQuery(sampleType: dataType,
-//                                                predicate: predicate,
-//                                                limit: HKObjectQueryNoLimit,
-//                                                sortDescriptors: nil) {
-//                                                    (query, sample, error) in
-//                                                    print("BEFORE GUARD")
-//                                                    guard
-//                                                        error == nil,
-//                                                        let quantitySamples = sample as? [HKQuantitySample] else {
-//                                                            print("Something went wrong: \(String(describing: error))")
-//                                                            return
-//                                                    }
-//                                                    print("AFTER GUARD AND LEN IS " , quantitySamples.count)
-//
-//                                                    for (index, element) in quantitySamples.enumerated() {
-//                                                        print("Item \(index): \(element)")
-//                                                    }
-//
-//                                                    result(quantitySamples.map { sample -> NSDictionary in
-//                                                        return [
-//                                                            "value": sample.quantity.doubleValue,
-//                                                            "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
-//                                                            "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
-//                                                        ]
-//                                                    })
-//
-//                }
                 HKHealthStore().execute(query)
             } else{
                 print("Something wrong with request")
@@ -159,8 +142,147 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
             result("Unsupported version or data type")
         }
         print("Unsupported version")
+    }else if(call.method.elementsEqual("getHeartAlerts")){
+        let arguments = call.arguments as? NSDictionary
+        let index = (arguments?["index"] as? Int) ?? -1
+        let startDate = (arguments?["startDate"] as? NSNumber) ?? 0
+        let endDate = (arguments?["endDate"] as? NSNumber) ?? 0
+        
+        
+        let dateFrom = Date(timeIntervalSince1970: startDate.doubleValue / 1000)
+        let dateTo = Date(timeIntervalSince1970: endDate.doubleValue / 1000)
+        
+        if #available(iOS 12.2, *) {
+            let allTypes = [
+                HKSampleType.categoryType(forIdentifier: .highHeartRateEvent)!,
+                HKSampleType.categoryType(forIdentifier: .lowHeartRateEvent)!,
+                HKSampleType.categoryType(forIdentifier: .irregularHeartRhythmEvent)!,
+            ]
+            print("INDEX IS " , index)
+            print("COUNT IS " , allTypes.count)
+            if(index >= 0 && index < allTypes.count){
+                let dataType = allTypes[index]
+                print("DATA TYPE IS ", dataType)
+                let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
+                print("PREDICATE ", predicate)
+                if (self.healthStore.authorizationStatus(for: dataType) == .sharingAuthorized) {
+                    
+                }
+                
+                let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
+                
+                
+                let query = HKSampleQuery(sampleType: dataType, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: [sortDescriptor]) {
+                    x, samplesOrNil, error in
+                    
+                    guard let samples = samplesOrNil as? [HKQuantitySample] else {
+                        result(FlutterError(code: "FlutterHealth", message: "Results are null", details: error))
+                        return
+                    }
+                    
+                    if(samples != nil){
+                        result(samples.map { sample -> NSDictionary in
+                            let unit = self.unitFromDartType(type: index)
+                            return [
+                                "value": sample.quantity.doubleValue(for: unit),
+                                "unit": unit.unitString,
+                                "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
+                                "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
+                            ]
+                        })
+                    } else {
+                        print("Either there are no values or the user did not allow getting this value")
+                        result("Either there are no values or the user did not allow getting this value")
+                    }
+                    return
+                }
+                HKHealthStore().execute(query)
+            } else{
+                print("Something wrong with request")
+                result("Unsupported version or data type")
+            }
+        } else {
+            print("Unsupported version 1")
+            result("Unsupported version or data type")
+        }
+        print("Unsupported version")
+        
     }
   }
+    
+//    public func valueFromDartType(sample: HKQuantitySample, type: Int) -> Double {
+//
+//        guard let unit: Double = {
+//            switch (type) {
+//            case 0:
+//                return sample.quantity.doubleValue(for: HKUnit.percent())
+//            case 1:
+//                return sample.quantity.doubleValue(for: HKUnit.meter())
+//            case 2:
+//                return sample.quantity.doubleValue(for: HKUnit.init(from: ""))
+//            case 3:
+//                return sample.quantity.doubleValue(for: HKUnit.meter())
+//            case 4:
+//                return sample.quantity.doubleValue(for: HKUnit.count())
+//            case 5,6:
+//                return sample.quantity.doubleValue(for: HKUnit.kilocalorie())
+//            case 7, 8, 9:
+//                return sample.quantity.doubleValue(for: HKUnit.init(from: "count/min"))
+//            case 10:
+//                return sample.quantity.doubleValue(for: HKUnit.degreeCelsius())
+//            case 11,12:
+//                return sample.quantity.doubleValue(for: HKUnit.millimeterOfMercury())
+//            case 13:
+//                return sample.quantity.doubleValue(for: HKUnit.percent())
+//            case 14:
+//                return sample.quantity.doubleValue(for: HKUnit.init(from: "mg/dl"))
+//            case 15:
+//                return sample.quantity.doubleValue(for: HKUnit.siemen())
+//            default:
+//                return 0
+//            }
+//            }() else {
+//                return 0
+//        }
+//        return unit
+//    }
+    
+    
+    public func unitFromDartType(type: Int) -> HKUnit {
+        guard let unit: HKUnit = {
+            switch (type) {
+            case 0:
+                return HKUnit.percent()
+            case 1:
+                return HKUnit.meter()
+            case 2:
+                return HKUnit.init(from: "")
+            case 3:
+                return HKUnit.meter()
+            case 4:
+                return HKUnit.count()
+            case 5,6:
+                return HKUnit.kilocalorie()
+            case 7, 8, 9:
+                return HKUnit.init(from: "count/min")
+            case 10:
+                return HKUnit.degreeCelsius()
+            case 11,12:
+                return HKUnit.millimeterOfMercury()
+            case 13:
+                return HKUnit.percent()
+            case 14:
+                return HKUnit.init(from: "mg/dl")
+            case 15:
+                return HKUnit.siemen()
+            default:
+                return HKUnit.count()
+            }
+            }() else {
+                return HKUnit.count()
+        }
+        return unit
+    }
 }
 
 

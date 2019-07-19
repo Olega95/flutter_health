@@ -3,10 +3,10 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_health'
-  s.version          = '0.0.1'
-  s.summary          = 'One library that combines Google Fit from Android and Apple Health from iOS'
+  s.version          = '0.1.2'
+  s.summary          = 'AppleHealthKit library that support most of the values provided.'
   s.description      = <<-DESC
-One library that combines Google Fit from Android and Apple Health from iOS
+AppleHealthKit library that support most of the values provided.
                        DESC
   s.homepage         = 'http://example.com'
   s.license          = { :file => '../LICENSE' }
