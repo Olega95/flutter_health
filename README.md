@@ -53,6 +53,7 @@ await FlutterHealth.getBloodPressureSys(startDate, endDate)
 ## Full Example
 
 ```$xslt
+ await FlutterHealth.checkIfHealthDataAvailable();
  bool _isAuthorized = true;
  DateTime startDate = DateTime.utc(2018);
  DateTime endDate = DateTime.now();
@@ -60,5 +61,22 @@ await FlutterHealth.getBloodPressureSys(startDate, endDate)
  _isAuthorized = await FlutterHealth.requestAuthorization();
  if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyFat(startDate, endDate));
  if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
- setState(() {});
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyMass(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getWaistCircumference(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getStepCount(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBasalEnergyBurned(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getActiveEnergyBurned(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeartRate(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getRestingHeartRate(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getWalkingHeartRate(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyTemperature(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodPressureSys(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodPressureDia(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodOxygen(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBloodGlucose(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getElectrodermalActivity(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKHighHeart(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKLowHeart(startDate, endDate));
+ if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKIrregular(startDate, endDate));
+
 ``` 
