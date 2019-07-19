@@ -85,6 +85,18 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 15);
   }
 
+  static Future<List<HKHealthData>> getHKHighHeart(DateTime startDate, DateTime endDate) async {
+    return getHKHeartData(startDate, endDate, 0);
+  }
+
+  static Future<List<HKHealthData>> getHKLowHeart(DateTime startDate, DateTime endDate) async {
+    return getHKHeartData(startDate, endDate, 1);
+  }
+
+  static Future<List<HKHealthData>> getHKIrregular(DateTime startDate, DateTime endDate) async {
+    return getHKHeartData(startDate, endDate, 2);
+  }
+
   static Future<List<HKHealthData>> getHKHealthData(DateTime startDate, DateTime endDate, int type) async {
     Map<String, dynamic> args = {};
     args.putIfAbsent('index', () => type);
@@ -92,6 +104,20 @@ class FlutterHealth {
     args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
     try {
       List result = await _channel.invokeMethod('getData', args);
+      var hkHealthData = List<HKHealthData>.from(result.map((i) => HKHealthData.fromJson(Map<String, dynamic>.from(i))));
+      return hkHealthData;
+    } catch (e, s) {
+      return const [];
+    }
+  }
+
+  static Future<List<HKHealthData>> getHKHeartData(DateTime startDate, DateTime endDate, int type) async {
+    Map<String, dynamic> args = {};
+    args.putIfAbsent('index', () => type);
+    args.putIfAbsent('startDate', () => startDate.millisecondsSinceEpoch);
+    args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
+    try {
+      List result = await _channel.invokeMethod('getHeartAlerts', args);
       var hkHealthData = List<HKHealthData>.from(result.map((i) => HKHealthData.fromJson(Map<String, dynamic>.from(i))));
       return hkHealthData;
     } catch (e, s) {

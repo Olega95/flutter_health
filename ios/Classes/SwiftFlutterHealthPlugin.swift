@@ -184,7 +184,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                         result(samples.map { sample -> NSDictionary in
                             let unit = self.unitFromDartType(type: index)
                             return [
-                                "value": sample.quantity.doubleValue(for: unit),
+                                "value": sample.quantity.doubleValue(for: HKUnit.init(from: "count/min")),
                                 "unit": unit.unitString,
                                 "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                                 "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
