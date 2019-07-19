@@ -35,14 +35,14 @@ class _MyAppState extends State<MyApp> {
       _isAuthorized = await FlutterHealth.requestAuthorization();
       if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyFat(startDate, endDate));
       setState(() {});
-      /*if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
       setState(() {});
-      */if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyMass(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyMass(startDate, endDate));
       setState(() {});
       if (_isAuthorized) _dataList.addAll(await FlutterHealth.getWaistCircumference(startDate, endDate));
       setState(() {});
-      //if (_isAuthorized) _dataList.addAll(await FlutterHealth.getStepCount(startDate, endDate));
-      //setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getStepCount(startDate, endDate));
+      setState(() {});
       if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBasalEnergyBurned(startDate, endDate));
       setState(() {});
       if (_isAuthorized) _dataList.addAll(await FlutterHealth.getActiveEnergyBurned(startDate, endDate));
