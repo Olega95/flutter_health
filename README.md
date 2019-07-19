@@ -14,7 +14,7 @@ Works on from **iOS 11.0**. Some data types are supported from **iOS 12.2**.
 #### Check if Apple Health is available on the device
 
 ```$xslt
-await await FlutterHealth.checkIfHealthDataAvailable()
+await FlutterHealth.checkIfHealthDataAvailable()
 ```
 
 #### Request authorization for the data types supported by the plugin
@@ -22,6 +22,7 @@ await await FlutterHealth.checkIfHealthDataAvailable()
 ```$xslt
 await FlutterHealth.requestAuthorization()
 ``` 
+######For now, you can request all of the options provided by the library
 
 
 #### Get the samples of data types authorized by the user within the given time range
@@ -50,6 +51,33 @@ await FlutterHealth.getBloodPressureSys(startDate, endDate)
  int dateTo;
 ``` 
 
+### You can get those values with this library:
+
+**Tested:** 
+
+* bodyFatPercentage
+* height
+* bodyMassIndex
+* waistCircumference
+* stepCount
+* basalEnergyBurned
+* activeEnergyBurned
+* heartRate
+* restingHeartRate
+* walkingHeartRateAverage
+* bodyTemperature
+* bloodPressureSystolic
+* bloodPressureDiastolic
+* oxygenSaturation
+* bloodGlucose
+* electrodermalActivity 
+
+**Could not be tested without a watch:**
+  
+* highHeartRateEvent
+* lowHeartRateEvent
+* irregularHeartRhythmEvent
+
 ## Full Example
 
 ```$xslt
@@ -57,8 +85,12 @@ await FlutterHealth.getBloodPressureSys(startDate, endDate)
  DateTime startDate = DateTime.utc(2018);
  DateTime endDate = DateTime.now();
  var _dataList = List<HKHealthData>();
+ 
  _isAuthorized = await FlutterHealth.requestAuthorization();
- if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyFat(startDate, endDate));
- if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
- setState(() {});
+ 
+ if (_isAuthorized) {
+     _dataList.addAll(await FlutterHealth.getBodyFat(startDate, endDate));
+     _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
+ }
+
 ``` 
