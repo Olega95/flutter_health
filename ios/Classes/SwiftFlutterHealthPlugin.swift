@@ -14,9 +14,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
 
   public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
     if(call.method.elementsEqual("checkIfHealthDataAvailable")){
-        if HKHealthStore.isHealthDataAvailable() {
-            result("Matomo:: HealthKit available.")
-        }
+        result(HKHealthStore.isHealthDataAvailable())
     } else if(call.method.elementsEqual("requestAuthorization")){
         var heartRateEventTypes = Set<HKSampleType>()
         if #available(iOS 12.2, *){
@@ -64,7 +62,6 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
             result(false)// Handle the error here.
         }
         
-        
     } else if(call.method.elementsEqual("getData")){
         let arguments = call.arguments as? NSDictionary
         let index = (arguments?["index"] as? Int) ?? -1
@@ -85,11 +82,11 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
                 HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
                 HKSampleType.quantityType(forIdentifier: .heartRate)!,
-                HKSampleType.quantityType(forIdentifier: .restingHeartRate)!,
-                HKSampleType.quantityType(forIdentifier: .walkingHeartRateAverage)!,
                 HKSampleType.quantityType(forIdentifier: .bodyTemperature)!,
                 HKSampleType.quantityType(forIdentifier: .bloodPressureSystolic)!,
                 HKSampleType.quantityType(forIdentifier: .bloodPressureDiastolic)!,
+                HKSampleType.quantityType(forIdentifier: .restingHeartRate)!,
+                HKSampleType.quantityType(forIdentifier: .walkingHeartRateAverage)!,
                 HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
                 HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                 HKSampleType.quantityType(forIdentifier: .electrodermalActivity)!,
@@ -124,6 +121,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                             "unit": unit.unitString,
                             "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                             "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
+                            "data_type_index": index,
                         ]
                     })
                     } else {
@@ -158,17 +156,12 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 HKSampleType.categoryType(forIdentifier: .lowHeartRateEvent)!,
                 HKSampleType.categoryType(forIdentifier: .irregularHeartRhythmEvent)!,
             ]
-            print("INDEX IS " , index)
-            print("COUNT IS " , allTypes.count)
             if(index >= 0 && index < allTypes.count){
-                let dataType = allTypes[index]
+                let dataType = allTypes[index-16]
                 print("DATA TYPE IS ", dataType)
                 let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
                 print("PREDICATE ", predicate)
-                if (self.healthStore.authorizationStatus(for: dataType) == .sharingAuthorized) {
-                    
-                }
-                
+            
                 let sortDescriptor = NSSortDescriptor(key: HKSampleSortIdentifierEndDate, ascending: true)
                 
                 
@@ -188,6 +181,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                                 "unit": unit.unitString,
                                 "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
                                 "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
+                                "data_type_index": index + 16,
                             ]
                         })
                     } else {
@@ -210,43 +204,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
     }
   }
     
-//    public func valueFromDartType(sample: HKQuantitySample, type: Int) -> Double {
-//
-//        guard let unit: Double = {
-//            switch (type) {
-//            case 0:
-//                return sample.quantity.doubleValue(for: HKUnit.percent())
-//            case 1:
-//                return sample.quantity.doubleValue(for: HKUnit.meter())
-//            case 2:
-//                return sample.quantity.doubleValue(for: HKUnit.init(from: ""))
-//            case 3:
-//                return sample.quantity.doubleValue(for: HKUnit.meter())
-//            case 4:
-//                return sample.quantity.doubleValue(for: HKUnit.count())
-//            case 5,6:
-//                return sample.quantity.doubleValue(for: HKUnit.kilocalorie())
-//            case 7, 8, 9:
-//                return sample.quantity.doubleValue(for: HKUnit.init(from: "count/min"))
-//            case 10:
-//                return sample.quantity.doubleValue(for: HKUnit.degreeCelsius())
-//            case 11,12:
-//                return sample.quantity.doubleValue(for: HKUnit.millimeterOfMercury())
-//            case 13:
-//                return sample.quantity.doubleValue(for: HKUnit.percent())
-//            case 14:
-//                return sample.quantity.doubleValue(for: HKUnit.init(from: "mg/dl"))
-//            case 15:
-//                return sample.quantity.doubleValue(for: HKUnit.siemen())
-//            default:
-//                return 0
-//            }
-//            }() else {
-//                return 0
-//        }
-//        return unit
-//    }
-    
+
     
     public func unitFromDartType(type: Int) -> HKUnit {
         guard let unit: HKUnit = {
@@ -263,11 +221,11 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 return HKUnit.count()
             case 5,6:
                 return HKUnit.kilocalorie()
-            case 7, 8, 9:
+            case 7, 11, 12:
                 return HKUnit.init(from: "count/min")
-            case 10:
+            case 8:
                 return HKUnit.degreeCelsius()
-            case 11,12:
+            case 9,10:
                 return HKUnit.millimeterOfMercury()
             case 13:
                 return HKUnit.percent()
