@@ -26,15 +26,12 @@ import com.google.android.gms.fitness.data.HealthDataTypes
 import com.google.android.gms.fitness.data.HealthFields
 import kotlin.collections.HashMap
 
-
 const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1111
 
 class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : MethodCallHandler, ActivityResultListener, Result {
 
-
     private var result: Result? = null
     private var handler: Handler? = null
-
 
     companion object {
         @JvmStatic
@@ -71,14 +68,13 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Boolean {
-        Log.d("authResult", "AUTH RESULT    $resultCode   ")
-        Log.d("authResult 222", activity.localClassName)
+        Log.d("FLUTTER_HEALTH", "GOOGLE FIT ON ACTIVITY RESULT $resultCode")
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
-                Log.d("authThere", "AUTH GRANTED")
+                Log.d("FLUTTER_HEALTH", "Access Granted!")
                 mResult?.success(true)
             } else {
-                Log.d("authNotThere", "AUTH NOT GRANTED")
+                Log.d("FLUTTER_HEALTH", "Access Denied!")
             }
         }
         return false
@@ -112,10 +108,9 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                         fitnessOptions)
             } else {
                 mResult?.success(true)
-                Log.d("authThere", "AUTH ALREADY THERE")
+                Log.d("FLUTTER_HEALTH", "Access already granted before!")
             }
         } else if (call.method == "getGFHealthData") {
-            Log.d("beforethread", "BEFORETHREADDD")
             val type = call.argument<Int>("index")
             val startTime = call.argument<Long>("startDate")
             val endTime = call.argument<Long>("endDate")
@@ -132,11 +127,8 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                 8 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
                 else -> DataType.TYPE_STEP_COUNT_DELTA
             }
-            Log.d("beforethread", "BEFORETHREAD")
             thread {
-                Log.d("afterthread", "AFTERTHREAD")
                 val gsa = GoogleSignIn.getAccountForExtension(activity.applicationContext, fitnessOptions)
-                Log.d("afterthread", "AFTERTHREAD 1")
 
                 val response = Fitness.getHistoryClient(activity.applicationContext, gsa)
                         .readData(DataReadRequest.Builder()
@@ -145,17 +137,10 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                                         ?: 0, TimeUnit.MILLISECONDS)
                                 .build())
 
-                Log.d("afterthread", "AFTERTHREAD 2 IS SUCCESS?? ${response.isSuccessful}")
-
-
                 val readDataResult = Tasks.await<DataReadResponse>(response)
                 val dataSet = readDataResult.getDataSet(dataType)
 
-                Log.d("afterthread", "AFTERTHREAD 2 IS SUCCESS?? ${dataSet.dataPoints.size}")
-                Log.d("DATA 1 ", "${dataSet.dataPoints}")
-
                 val map = dataSet.dataPoints.map {
-                    Log.d("IT IS ", "IT $it")
                     val map = HashMap<String, Any>()
                     map["value"] = try {
                         it.getValue(fields[type ?: 0]).asFloat()
@@ -166,8 +151,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                             try {
                                 it.getValue(fields[type ?: 0]).asString()
                             }catch (e3: Exception){
-                                Log.e("ERROR", e3.toString())
-                                Log.e("ERROR", it.getValue(fields[type ?: 0]).javaClass.name)
+                                Log.e("FLUTTER_HEALTH::ERROR", e3.toString())
                             }
                         }
                     }
@@ -181,8 +165,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                                 try {
                                     it.getValue(fields[type ?: 0]).asString()
                                 }catch (e3: Exception){
-                                    Log.e("ERROR", e3.toString())
-                                    Log.e("ERROR", it.getValue(fields[type ?: 0]).javaClass.name)
+                                    Log.e("FLUTTER_HEALTH::ERROR", e3.toString())
                                 }
                             }
                         }
@@ -192,7 +175,6 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                     map["data_type_index"] = type?:-1
                     return@map map
                 }
-                Log.d("DATA", "$map")
                 activity.runOnUiThread { result.success(map) }
             }
 

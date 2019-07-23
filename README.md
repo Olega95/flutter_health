@@ -1,13 +1,31 @@
 # flutter_health
 
-Apple Health Kit library for Flutter that support most of the values provided.
+This library combines both GoogleFit and AppleHealthKit. It support most of the values provided.
 
 Works on from **iOS 11.0**. Some data types are supported from **iOS 12.2**.
+
+Supports **Android X**
+
 
 [Dart package](https://pub.dev/packages/flutter_health)
 
 [Gitlab link](https://gitlab.com/petleo-and-iatros-opensource/flutter_health)
 
+
+#AppleHealthKit
+First Let's go through apple health kit
+
+## Setup
+
+From Runner, select the **Capabilities tab** 
+
+* Enable **HealthKit** 
+* Check the **Clinical Health Records** box.
+
+Then in the info.plist, Add string values for the following:
+
+* **NSHealthUpdateUsageDescription**
+* **NSHealthShareUsageDescription**
 
 ## How to use
 
@@ -109,3 +127,69 @@ await FlutterHealth.getBloodPressureSys(startDate, endDate)
  if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKIrregular(startDate, endDate));
 
 ``` 
+
+
+
+
+#GoogleFit
+
+
+## Setup
+
+For GoogleFit, the initial setup is a bit longer, and can get frustrating.
+Just follow [this setup](https://developers.google.com/fit/android/get-started). 
+
+## How to use
+
+#### Request authorization for the data types supported by the plugin
+
+```$xslt
+await FlutterHealth.requestAuthorization()
+``` 
+######For now, you can request all of the options provided by the library
+
+
+#### Get the samples of data types authorized by the user within the given time range
+
+
+For all data
+```$xslt
+await FlutterHealth.getGFAllData(startDate, endDate)
+``` 
+
+For specific type
+```$xslt
+await FlutterHealth.getGFBodyFat(startDate, endDate)
+``` 
+
+```$xslt
+await FlutterHealth.getGFHeartRate(startDate, endDate)
+``` 
+
+```$xslt
+await FlutterHealth.getGFBloodPressureSys(startDate, endDate)
+``` 
+...
+
+
+#### Data will be returning as a List of an object called GFHealthData. This object has the following attributes:
+
+```$xslt
+ String value;
+ String value2;
+ String unit;
+ int dateFrom;
+ int dateTo;
+``` 
+
+### You can get those GoogleFit values with this library:
+
+* bodyFatPercentage
+* height
+* stepCount
+* calories
+* heartRate
+* bodyTemperature
+* bloodPressure
+* oxygenSaturation
+* bloodGlucose

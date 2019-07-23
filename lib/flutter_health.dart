@@ -158,13 +158,9 @@ class FlutterHealth {
     args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
     try {
       List result = await _channel.invokeMethod('getGFHealthData', args);
-      print("RESULT IS $result      ${result.length}");
       var gfHealthData = List<GFHealthData>.from(result.map((i) => GFHealthData.fromJson(Map<String, dynamic>.from(i))));
-      print("GFHEALTHDATA IS $gfHealthData     ${gfHealthData.length}");
       return gfHealthData ;
     } catch (e, s) {
-      print("ERROR $e");
-      print("STACKTR $s");
       return const [];
     }
   }
