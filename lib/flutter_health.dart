@@ -89,9 +89,8 @@ class FlutterHealth {
     return [sys, dia];
   }
 
-  static Future<List<List<HKHealthData>>> getGFBloodPressure(DateTime startDate, DateTime endDate) async {
-    var sys = await getGFHealthData(startDate, endDate, 6);
-    return [sys];
+  static Future<List<HKHealthData>> getGFBloodPressure(DateTime startDate, DateTime endDate) async {
+    return await getGFHealthData(startDate, endDate, 6);
   }
 
 
@@ -159,7 +158,7 @@ class FlutterHealth {
     try {
       List result = await _channel.invokeMethod('getGFHealthData', args);
       var gfHealthData = List<GFHealthData>.from(result.map((i) => GFHealthData.fromJson(Map<String, dynamic>.from(i))));
-      return gfHealthData ;
+      return gfHealthData;
     } catch (e, s) {
       return const [];
     }
@@ -184,11 +183,8 @@ class FlutterHealth {
     for (int i = 0; i < healthData.length; i++) {
       if (healthData[i] == HKDataType.BLOOD_PRESSURE_SYSTOLIC) {
         bpRecords = await getHKHealthData(startDate, endDate, i);
-        print("BPREC LEN 1  ${bpRecords.length}        $i");
       } else if (healthData[i] == HKDataType.BLOOD_PRESSURE_DIASTOLIC) {
         var dia = await getHKHealthData(startDate, endDate, i);
-        print("DIA LEN ${dia.length}");
-        print("BPREC LEN ${bpRecords.length}");
         for (int j = 0; j < dia.length; j++) {
           try {
             bpRecords[j].value2 = dia[j].value;

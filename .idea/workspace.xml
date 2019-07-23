@@ -2,15 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="739b312a-03c1-49b7-9de5-5fbf264376f7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt" beforeDir="false" afterPath="$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ios/flutter_health.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/flutter_health.podspec" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/flutter_health.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_health.dart" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
@@ -30,11 +22,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lib/flutter_health.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="117">
-              <caret line="153" selection-start-line="153" selection-end-line="153" />
+            <state relative-caret-position="392">
+              <caret line="91" column="35" selection-start-line="91" selection-start-column="35" selection-end-line="91" selection-end-column="35" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -42,11 +34,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="420">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="194">
+              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
               <folding>
                 <element signature="e#35#1162#0" expanded="true" />
               </folding>
@@ -86,7 +78,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>google fit</find>
       <find>One library that combines Google Fit from Android and Apple Health from iOS</find>
       <find>0.0.1</find>
       <find>0.1.1</find>
@@ -116,6 +107,7 @@
       <find>1.1.5</find>
       <find>print</find>
       <find>pri</find>
+      <find>log</find>
     </findStrings>
     <replaceStrings>
       <replace>'getData'</replace>
@@ -151,8 +143,8 @@
         <option value="$PROJECT_DIR$/example/android/gradle/wrapper/gradle-wrapper.properties" />
         <option value="$PROJECT_DIR$/pubspec.yaml" />
         <option value="$PROJECT_DIR$/README.md" />
-        <option value="$PROJECT_DIR$/lib/flutter_health.dart" />
         <option value="$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt" />
+        <option value="$PROJECT_DIR$/lib/flutter_health.dart" />
       </list>
     </option>
   </component>
@@ -274,7 +266,7 @@
       <workItem from="1563528143169" duration="7864000" />
       <workItem from="1563706466703" duration="9817000" />
       <workItem from="1563786533285" duration="2704000" />
-      <workItem from="1563875532566" duration="2227000" />
+      <workItem from="1563875532566" duration="2906000" />
     </task>
     <task id="LOCAL-00001" summary="apple health kind of works">
       <created>1563382233369</created>
@@ -311,17 +303,24 @@
       <option name="project" value="LOCAL" />
       <updated>1563885691700</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Google fit integration completed">
+      <created>1563886839948</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1563886839948</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="49637000" />
+    <option name="totallyTimeSpent" value="50316000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3003663" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3003663" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -337,7 +336,7 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Dart Analysis" order="7" />
-      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49946752" visible="true" weight="0.23673469" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49946752" visible="true" weight="0.23673469" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50159746" side_tool="true" weight="0.34059405" />
       <window_info anchor="bottom" id="Messages" order="11" weight="0.32871288" />
@@ -486,22 +485,22 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/lib/flutter_health.dart">
+    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="117">
-          <caret line="153" selection-start-line="153" selection-end-line="153" />
+        <state relative-caret-position="194">
+          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
           <folding>
-            <element signature="e#0#20#0" expanded="true" />
+            <element signature="e#35#1162#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt">
+    <entry file="file://$PROJECT_DIR$/lib/flutter_health.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="420">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
+        <state relative-caret-position="392">
+          <caret line="91" column="35" selection-start-line="91" selection-start-column="35" selection-end-line="91" selection-end-column="35" />
           <folding>
-            <element signature="e#35#1162#0" expanded="true" />
+            <element signature="e#0#20#0" expanded="true" />
           </folding>
         </state>
       </provider>
