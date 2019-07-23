@@ -1,6 +1,6 @@
 name: flutter_health
 description: AppleHealthKit library that support most of the values provided.
-version: 0.1.7
+version: 1.1.5
 authors: [Bulent Hacioglu <buelent.hacioglu@petleo.net>, Karim Abdo <karim.abdo@petleo.net>]
 homepage: https://gitlab.com/petleo-and-iatros-opensource/flutter_health
 

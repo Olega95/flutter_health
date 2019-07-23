@@ -14,6 +14,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   var _healthKitOutput;
   var _dataList = List<HKHealthData>();
+  var str = "";
   bool _isAuthorized = true;
 
   @override
@@ -33,7 +34,15 @@ class _MyAppState extends State<MyApp> {
     DateTime endDate = DateTime.now();
     Future.delayed(Duration(seconds: 2), () async {
       _isAuthorized = await FlutterHealth.requestAuthorization();
-      //if (_isAuthorized) _dataList.addAll(await FlutterHealth.getAllDataWithCombinedBP(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFBodyFat(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFHeight(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFStepCount(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFEnergyBurned(startDate, endDate));
+      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFHeartRate(startDate, endDate));
       setState(() {});
       /* if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
       setState(() {});
@@ -98,6 +107,9 @@ class _MyAppState extends State<MyApp> {
                   title: Text(_dataList[index].value.toString() + " " + _dataList[index].value2.toString()),
                   trailing: Text(_dataList[index].unit),
                   subtitle: Text(DateTime.fromMillisecondsSinceEpoch(_dataList[index].dateFrom).toIso8601String()),
+                  /*title: Text(str),
+                  trailing: Text(str),
+                  subtitle: Text(str),*/
                 )),
       ),
     );

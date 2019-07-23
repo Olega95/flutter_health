@@ -14,16 +14,27 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 import io.flutter.plugin.common.PluginRegistry.Registrar
 import android.content.Intent
+import android.os.Handler
 import android.util.Log
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
 import java.util.*
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
+import android.os.Looper
+import com.google.android.gms.fitness.data.Field
+import com.google.android.gms.fitness.data.HealthDataTypes
+import com.google.android.gms.fitness.data.HealthFields
+import kotlin.collections.HashMap
 
 
 const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1111
 
-class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : MethodCallHandler, ActivityResultListener {
+class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : MethodCallHandler, ActivityResultListener, Result {
+
+
+    private var result: Result? = null
+    private var handler: Handler? = null
+
 
     companion object {
         @JvmStatic
@@ -36,6 +47,29 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
         }
     }
 
+
+    fun MainThreadResult(result: Result) {
+        this.result = result
+        handler = Handler(Looper.getMainLooper())
+    }
+
+    override fun success(p0: Any?) {
+        handler?.post(
+                Runnable { result?.success(p0) })
+    }
+
+    override fun notImplemented() {
+        handler?.post(
+                Runnable { result?.notImplemented() })
+    }
+
+    override fun error(
+            errorCode: String, errorMessage: String?, errorDetails: Any?) {
+        handler?.post(
+                Runnable { result?.error(errorCode, errorMessage, errorDetails) })
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Boolean {
         Log.d("authResult", "AUTH RESULT    $resultCode   ")
         Log.d("authResult 222", activity.localClassName)
@@ -43,7 +77,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
             if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
                 Log.d("authThere", "AUTH GRANTED")
                 mResult?.success(true)
-            }else{
+            } else {
                 Log.d("authNotThere", "AUTH NOT GRANTED")
             }
         }
@@ -53,8 +87,17 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
     var mResult: Result? = null
 
     val fitnessOptions = FitnessOptions.builder()
+            .addDataType(DataType.TYPE_BODY_FAT_PERCENTAGE, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
+            .addDataType(HealthDataTypes.TYPE_BODY_TEMPERATURE, FitnessOptions.ACCESS_READ)
+            .addDataType(HealthDataTypes.TYPE_BLOOD_PRESSURE, FitnessOptions.ACCESS_READ)
+            .addDataType(HealthDataTypes.TYPE_OXYGEN_SATURATION, FitnessOptions.ACCESS_READ)
+            .addDataType(HealthDataTypes.TYPE_BLOOD_GLUCOSE, FitnessOptions.ACCESS_READ)
             .build()
+
 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "requestAuthorization") {
@@ -68,26 +111,51 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                         GoogleSignIn.getLastSignedInAccount(activity),
                         fitnessOptions)
             } else {
+                mResult?.success(true)
                 Log.d("authThere", "AUTH ALREADY THERE")
             }
         } else if (call.method == "getGFHealthData") {
-             thread {
-                 val gsa = GoogleSignIn.getAccountForExtension(activity.applicationContext, fitnessOptions)
+            val type = call.argument<Int>("index")
+            val startTime = call.argument<Int>("startDate")
+            val endTime = call.argument<Int>("endDate")
+            val fields = listOf(Field.FIELD_PERCENTAGE, Field.FIELD_HEIGHT, Field.FIELD_STEPS, Field.FIELD_CALORIES, Field.FIELD_BPM, HealthFields.FIELD_BODY_TEMPERATURE, HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC, HealthFields.FIELD_OXYGEN_SATURATION, HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL)
+            val dataType = when (type) {
+                0 -> DataType.TYPE_BODY_FAT_PERCENTAGE
+                1 -> DataType.TYPE_HEIGHT
+                2 -> DataType.TYPE_STEP_COUNT_DELTA
+                3 -> DataType.TYPE_CALORIES_EXPENDED
+                4 -> DataType.TYPE_HEART_RATE_BPM
+                5 -> HealthDataTypes.TYPE_BODY_TEMPERATURE
+                6 -> HealthDataTypes.TYPE_BLOOD_PRESSURE
+                7 -> HealthDataTypes.TYPE_OXYGEN_SATURATION
+                8 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
+                else -> DataType.TYPE_STEP_COUNT_DELTA
+            }
+            thread {
+                val gsa = GoogleSignIn.getAccountForExtension(activity.applicationContext, fitnessOptions)
 
-                 val startTime = Calendar.getInstance()
-                 startTime.add(Calendar.DATE, -5)
-                 val endTime = Calendar.getInstance()
+                val response = Fitness.getHistoryClient(activity.applicationContext, gsa)
+                        .readData(DataReadRequest.Builder()
+                                .read(dataType)
+                                .setTimeRange(startTime?.toLong() ?: 0, endTime?.toLong()
+                                        ?: 0, TimeUnit.MILLISECONDS)
+                                .build())
 
-                 val response = Fitness.getHistoryClient(activity.applicationContext, gsa)
-                         .readData(DataReadRequest.Builder()
-                                 .read(DataType.TYPE_STEP_COUNT_DELTA)
-                                 .setTimeRange(startTime.timeInMillis, endTime.timeInMillis, TimeUnit.MILLISECONDS)
-                                 .build())
+                val readDataResult = Tasks.await<DataReadResponse>(response)
+                val dataSet = readDataResult.getDataSet(dataType)
 
-                 val readDataResult = Tasks.await<DataReadResponse>(response)
-                 val dataSet = readDataResult.getDataSet(DataType.TYPE_STEP_COUNT_DELTA)
-                 result.success("DATASET SIZE IS ${dataSet.dataPoints.size}");
-             }
+                val map = dataSet.dataPoints.map {
+                    val map = HashMap<String, Any>()
+                    map["value"] = it.getValue(fields[type ?: 0]).asFloat()
+                    map["date_from"] = it.getStartTime(TimeUnit.MILLISECONDS)
+                    map["date_to"] = it.getEndTime(TimeUnit.MILLISECONDS)
+                    map["unit"] = ""
+                    map["data_type_index"] = type.toString()
+                }
+                Log.d("DATA", "${dataSet.dataPoints}")
+                activity.runOnUiThread { result.success(map) }
+            }
+
         } else {
             result.notImplemented()
         }

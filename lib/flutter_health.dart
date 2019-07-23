@@ -15,73 +15,113 @@ class FlutterHealth {
     return isAuthorized;
   }
 
-  static Future<List<HKHealthData>> getBodyFat(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKBodyFat(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 0);
   }
 
-  static Future<List<HKHealthData>> getHeight(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFBodyFat(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 0);
+  }
+
+  static Future<List<HKHealthData>> getHKHeight(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 1);
   }
 
-  static Future<List<HKHealthData>> getBodyMass(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFHeight(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 1);
+  }
+
+  static Future<List<HKHealthData>> getHKBodyMass(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 2);
   }
 
-  static Future<List<HKHealthData>> getWaistCircumference(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKWaistCircumference(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 3);
   }
 
-  static Future<List<HKHealthData>> getStepCount(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKStepCount(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 4);
   }
 
-  static Future<List<HKHealthData>> getBasalEnergyBurned(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFStepCount(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 2);
+  }
+
+  static Future<List<HKHealthData>> getHKBasalEnergyBurned(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 5);
   }
 
-  static Future<List<HKHealthData>> getActiveEnergyBurned(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKActiveEnergyBurned(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 6);
   }
 
-  static Future<List<HKHealthData>> getHeartRate(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFEnergyBurned(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 3);
+  }
+
+  static Future<List<HKHealthData>> getHKHeartRate(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 7);
   }
 
-  static Future<List<HKHealthData>> getRestingHeartRate(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFHeartRate(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 4);
+  }
+
+  static Future<List<HKHealthData>> getHKRestingHeartRate(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 8);
   }
 
-  static Future<List<HKHealthData>> getWalkingHeartRate(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKWalkingHeartRate(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 9);
   }
 
-  static Future<List<HKHealthData>> getBodyTemperature(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKBodyTemperature(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 10);
   }
 
-  static Future<List<List<HKHealthData>>> getBloodPressure(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFBodyTemperature(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 5);
+  }
+
+  static Future<List<List<HKHealthData>>> getHKBloodPressure(DateTime startDate, DateTime endDate) async {
     var sys = await getHKHealthData(startDate, endDate, 11);
     var dia = await getHKHealthData(startDate, endDate, 12);
     return [sys, dia];
   }
 
-  static Future<List<HKHealthData>> getBloodPressureSys(DateTime startDate, DateTime endDate) async {
+  static Future<List<List<HKHealthData>>> getGFBloodPressure(DateTime startDate, DateTime endDate) async {
+    var sys = await getGFHealthData(startDate, endDate, 6);
+    return [sys];
+  }
+
+
+  static Future<List<HKHealthData>> getHKBloodPressureSys(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 11);
   }
 
-  static Future<List<HKHealthData>> getBloodPressureDia(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKBloodPressureDia(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 12);
   }
 
-  static Future<List<HKHealthData>> getBloodOxygen(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKBloodOxygen(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 13);
   }
 
-  static Future<List<HKHealthData>> getBloodGlucose(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFBloodOxygen(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 7);
+  }
+
+
+  static Future<List<HKHealthData>> getHKBloodGlucose(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 14);
   }
 
-  static Future<List<HKHealthData>> getElectrodermalActivity(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFBloodGlucose(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 8);
+  }
+
+
+  static Future<List<HKHealthData>> getHKElectrodermalActivity(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 15);
   }
 
@@ -97,7 +137,7 @@ class FlutterHealth {
     return getHKHeartData(startDate, endDate, 18);
   }
 
-  static Future<List<HKHealthData>> getAllData(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKAllData(DateTime startDate, DateTime endDate) async {
     List<HKHealthData> allData = new List<HKHealthData>();
     var healthData = List.from(HKDataType.values);
     healthData.removeRange(
@@ -111,7 +151,21 @@ class FlutterHealth {
     return allData;
   }
 
-  static Future<List<HKHealthData>> getAllDataWithCombinedBP(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getGFHealthData(DateTime startDate, DateTime endDate, int type) async {
+    Map<String, dynamic> args = {};
+    args.putIfAbsent('index', () => type);
+    args.putIfAbsent('startDate', () => startDate.millisecondsSinceEpoch);
+    args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
+    try {
+      List result = await _channel.invokeMethod('getData', args);
+      var hkHealthData = List<HKHealthData>.from(result.map((i) => HKHealthData.fromJson(Map<String, dynamic>.from(i))));
+      return hkHealthData;
+    } catch (e) {
+      return const [];
+    }
+  }
+
+  static Future<List<HKHealthData>> getHKAllDataWithCombinedBP(DateTime startDate, DateTime endDate) async {
     List<HKHealthData> allData = new List<HKHealthData>();
     var healthData = List.from(HKDataType.values);
     healthData.removeRange(
@@ -121,9 +175,7 @@ class FlutterHealth {
       if (healthData[i] == HKDataType.BLOOD_PRESSURE_SYSTOLIC) {
         bpRecords = await getHKHealthData(startDate, endDate, i);
         print("BPREC LEN 1  ${bpRecords.length}        $i");
-      }
-
-      else if (healthData[i] == HKDataType.BLOOD_PRESSURE_DIASTOLIC) {
+      } else if (healthData[i] == HKDataType.BLOOD_PRESSURE_DIASTOLIC) {
         var dia = await getHKHealthData(startDate, endDate, i);
         print("DIA LEN ${dia.length}");
         print("BPREC LEN ${bpRecords.length}");
