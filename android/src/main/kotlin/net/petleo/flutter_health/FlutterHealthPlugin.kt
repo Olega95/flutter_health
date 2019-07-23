@@ -115,10 +115,11 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                 Log.d("authThere", "AUTH ALREADY THERE")
             }
         } else if (call.method == "getGFHealthData") {
+            Log.d("beforethread", "BEFORETHREADDD")
             val type = call.argument<Int>("index")
-            val startTime = call.argument<Int>("startDate")
-            val endTime = call.argument<Int>("endDate")
-            val fields = listOf(Field.FIELD_PERCENTAGE, Field.FIELD_HEIGHT, Field.FIELD_STEPS, Field.FIELD_CALORIES, Field.FIELD_BPM, HealthFields.FIELD_BODY_TEMPERATURE, HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC, HealthFields.FIELD_OXYGEN_SATURATION, HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL)
+            val startTime = call.argument<Long>("startDate")
+            val endTime = call.argument<Long>("endDate")
+            val fields = listOf(Field.FIELD_PERCENTAGE, Field.FIELD_HEIGHT, Field.FIELD_STEPS, Field.FIELD_CALORIES, Field.FIELD_BPM, HealthFields.FIELD_BODY_TEMPERATURE, HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC, HealthFields.FIELD_OXYGEN_SATURATION, HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL)
             val dataType = when (type) {
                 0 -> DataType.TYPE_BODY_FAT_PERCENTAGE
                 1 -> DataType.TYPE_HEIGHT
@@ -131,28 +132,67 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                 8 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
                 else -> DataType.TYPE_STEP_COUNT_DELTA
             }
+            Log.d("beforethread", "BEFORETHREAD")
             thread {
+                Log.d("afterthread", "AFTERTHREAD")
                 val gsa = GoogleSignIn.getAccountForExtension(activity.applicationContext, fitnessOptions)
+                Log.d("afterthread", "AFTERTHREAD 1")
 
                 val response = Fitness.getHistoryClient(activity.applicationContext, gsa)
                         .readData(DataReadRequest.Builder()
                                 .read(dataType)
-                                .setTimeRange(startTime?.toLong() ?: 0, endTime?.toLong()
+                                .setTimeRange(startTime ?: 0, endTime
                                         ?: 0, TimeUnit.MILLISECONDS)
                                 .build())
+
+                Log.d("afterthread", "AFTERTHREAD 2 IS SUCCESS?? ${response.isSuccessful}")
+
 
                 val readDataResult = Tasks.await<DataReadResponse>(response)
                 val dataSet = readDataResult.getDataSet(dataType)
 
+                Log.d("afterthread", "AFTERTHREAD 2 IS SUCCESS?? ${dataSet.dataPoints.size}")
+                Log.d("DATA 1 ", "${dataSet.dataPoints}")
+
                 val map = dataSet.dataPoints.map {
+                    Log.d("IT IS ", "IT $it")
                     val map = HashMap<String, Any>()
-                    map["value"] = it.getValue(fields[type ?: 0]).asFloat()
+                    map["value"] = try {
+                        it.getValue(fields[type ?: 0]).asFloat()
+                    } catch (e1: Exception) {
+                        try {
+                            it.getValue(fields[type ?: 0]).asInt()
+                        } catch (e2: Exception) {
+                            try {
+                                it.getValue(fields[type ?: 0]).asString()
+                            }catch (e3: Exception){
+                                Log.e("ERROR", e3.toString())
+                                Log.e("ERROR", it.getValue(fields[type ?: 0]).javaClass.name)
+                            }
+                        }
+                    }
+                    if(dataType == HealthDataTypes.TYPE_BLOOD_PRESSURE)
+                        map["value2"] = try {
+                            it.getValue(HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC).asFloat()
+                        } catch (e1: Exception) {
+                            try {
+                                it.getValue(fields[type ?: 0]).asInt()
+                            } catch (e2: Exception) {
+                                try {
+                                    it.getValue(fields[type ?: 0]).asString()
+                                }catch (e3: Exception){
+                                    Log.e("ERROR", e3.toString())
+                                    Log.e("ERROR", it.getValue(fields[type ?: 0]).javaClass.name)
+                                }
+                            }
+                        }
                     map["date_from"] = it.getStartTime(TimeUnit.MILLISECONDS)
                     map["date_to"] = it.getEndTime(TimeUnit.MILLISECONDS)
                     map["unit"] = ""
-                    map["data_type_index"] = type.toString()
+                    map["data_type_index"] = type?:-1
+                    return@map map
                 }
-                Log.d("DATA", "${dataSet.dataPoints}")
+                Log.d("DATA", "$map")
                 activity.runOnUiThread { result.success(map) }
             }
 

@@ -19,7 +19,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 0);
   }
 
-  static Future<List<HKHealthData>> getGFBodyFat(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFBodyFat(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 0);
   }
 
@@ -27,7 +27,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 1);
   }
 
-  static Future<List<HKHealthData>> getGFHeight(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFHeight(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 1);
   }
 
@@ -43,7 +43,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 4);
   }
 
-  static Future<List<HKHealthData>> getGFStepCount(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFStepCount(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 2);
   }
 
@@ -55,7 +55,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 6);
   }
 
-  static Future<List<HKHealthData>> getGFEnergyBurned(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFEnergyBurned(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 3);
   }
 
@@ -63,7 +63,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 7);
   }
 
-  static Future<List<HKHealthData>> getGFHeartRate(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFHeartRate(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 4);
   }
 
@@ -79,7 +79,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 10);
   }
 
-  static Future<List<HKHealthData>> getGFBodyTemperature(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFBodyTemperature(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 5);
   }
 
@@ -107,7 +107,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 13);
   }
 
-  static Future<List<HKHealthData>> getGFBloodOxygen(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFBloodOxygen(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 7);
   }
 
@@ -116,7 +116,7 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 14);
   }
 
-  static Future<List<HKHealthData>> getGFBloodGlucose(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFBloodGlucose(DateTime startDate, DateTime endDate) async {
     return getGFHealthData(startDate, endDate, 8);
   }
 
@@ -151,18 +151,32 @@ class FlutterHealth {
     return allData;
   }
 
-  static Future<List<HKHealthData>> getGFHealthData(DateTime startDate, DateTime endDate, int type) async {
+  static Future<List<GFHealthData>> getGFHealthData(DateTime startDate, DateTime endDate, int type) async {
     Map<String, dynamic> args = {};
     args.putIfAbsent('index', () => type);
     args.putIfAbsent('startDate', () => startDate.millisecondsSinceEpoch);
     args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
     try {
-      List result = await _channel.invokeMethod('getData', args);
-      var hkHealthData = List<HKHealthData>.from(result.map((i) => HKHealthData.fromJson(Map<String, dynamic>.from(i))));
-      return hkHealthData;
-    } catch (e) {
+      List result = await _channel.invokeMethod('getGFHealthData', args);
+      print("RESULT IS $result      ${result.length}");
+      var gfHealthData = List<GFHealthData>.from(result.map((i) => GFHealthData.fromJson(Map<String, dynamic>.from(i))));
+      print("GFHEALTHDATA IS $gfHealthData     ${gfHealthData.length}");
+      return gfHealthData ;
+    } catch (e, s) {
+      print("ERROR $e");
+      print("STACKTR $s");
       return const [];
     }
+  }
+
+  static Future<List<GFHealthData>> getGFAllData(DateTime startDate, DateTime endDate) async {
+    List<GFHealthData> allData = new List<GFHealthData>();
+    var healthData = List.from(GFDataType.values);
+
+    for (int i = 0; i < GFDataType.values.length; i++) {
+      allData.addAll(await getGFHealthData(startDate, endDate, i));
+    }
+    return allData;
   }
 
   static Future<List<HKHealthData>> getHKAllDataWithCombinedBP(DateTime startDate, DateTime endDate) async {
@@ -252,6 +266,37 @@ class HKHealthData {
   }
 }
 
+class GFHealthData {
+  String value;
+  String value2;
+  String unit;
+  int dateFrom;
+  int dateTo;
+  GFDataType dataType;
+
+  GFHealthData({this.value, this.unit, this.dateFrom, this.dateTo, this.dataType});
+
+  GFHealthData.fromJson(Map<String, dynamic> json) {
+    value = json['value'].toString();
+    value2 = json['value2'].toString();
+    unit = json['unit'];
+    dateFrom = json['date_from'];
+    dateTo = json['date_to'];
+    dataType = GFDataType.values[json['data_type_index']];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['value'] = this.value;
+    data['value2'] = this.value2;
+    data['unit'] = this.unit;
+    data['date_from'] = this.dateFrom;
+    data['date_to'] = this.dateTo;
+    data['data_type_index'] = GFDataType.values.indexOf(this.dataType);
+    return data;
+  }
+}
+
 enum HKDataType {
   BODY_FAT,
   HEIGHT,
@@ -272,4 +317,16 @@ enum HKDataType {
   HIGH_HEART_RATE_EVENT,
   LOW_HEART_RATE_EVENT,
   IRREGULAR_HEART_RATE_EVENT
+}
+
+enum GFDataType {
+  BODY_FAT,
+  HEIGHT,
+  STEPS,
+  CALORIES,
+  HEART_RATE,
+  BODY_TEMPERATURE,
+  BLOOD_PRESSURE,
+  BLOOD_OXYGEN,
+  BLOOD_GLUCOSE,
 }
