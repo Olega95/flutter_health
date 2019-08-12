@@ -12,8 +12,8 @@ Supports **Android X**
 [Gitlab link](https://gitlab.com/petleo-and-iatros-opensource/flutter_health)
 
 
-#AppleHealthKit
-First Let's go through apple health kit
+# AppleHealthKit
+First Let's go through apple health kit:
 
 ## Setup
 
