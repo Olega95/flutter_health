@@ -89,7 +89,7 @@ class FlutterHealth {
     return [sys, dia];
   }
 
-  static Future<List<HKHealthData>> getGFBloodPressure(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFBloodPressure(DateTime startDate, DateTime endDate) async {
     return await getGFHealthData(startDate, endDate, 6);
   }
 
