@@ -3,7 +3,7 @@
 #
 Pod::Spec.new do |s|
   s.name             = 'flutter_health'
-  s.version          = '1.1.8'
+  s.version          = '1.1.9'
   s.summary          = 'AppleHealthKit library that support most of the values provided.'
   s.description      = <<-DESC
 AppleHealthKit library that support most of the values provided.
