@@ -34,15 +34,13 @@ class _MyAppState extends State<MyApp> {
     DateTime endDate = DateTime.now();
     Future.delayed(Duration(seconds: 2), () async {
       _isAuthorized = await FlutterHealth.requestAuthorization();
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFBodyFat(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKBodyFat(startDate, endDate));
       setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFHeight(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKHeight(startDate, endDate));
       setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFStepCount(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCount(startDate, endDate));
       setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFEnergyBurned(startDate, endDate));
-      setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getGFHeartRate(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKHeartRate(startDate, endDate));
       setState(() {});
       /* if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
       setState(() {});
