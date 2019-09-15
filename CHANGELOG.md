@@ -1,4 +1,4 @@
-## 1.1.6
+## 1.1.8
 
 Apple health kit for flutter (Flutter Health) initial release
 

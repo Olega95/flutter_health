@@ -2,7 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="739b312a-03c1-49b7-9de5-5fbf264376f7" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/flutter_health.iml" beforeDir="false" afterPath="$PROJECT_DIR$/flutter_health.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ios/flutter_health.podspec" beforeDir="false" afterPath="$PROJECT_DIR$/ios/flutter_health.podspec" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/flutter_health.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_health.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.dart_tool/" />
@@ -22,11 +30,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/lib/flutter_health.dart">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="392">
-              <caret line="91" column="35" selection-start-line="91" selection-start-column="35" selection-end-line="91" selection-end-column="35" />
+            <state relative-caret-position="460">
+              <caret line="105" column="51" selection-start-line="105" selection-start-column="51" selection-end-line="105" selection-end-column="51" />
               <folding>
                 <element signature="e#0#20#0" expanded="true" />
               </folding>
@@ -38,7 +46,7 @@
         <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="194">
-              <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+              <caret line="31" selection-start-line="31" selection-end-line="31" />
               <folding>
                 <element signature="e#35#1162#0" expanded="true" />
               </folding>
@@ -51,18 +59,18 @@
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="270">
-                <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+                <caret line="18" selection-start-line="18" selection-end-line="18" />
               </first_editor>
               <second_editor />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/pubspec.yaml">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="1" column="109" lean-forward="true" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="109" />
+              <caret line="1" column="109" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="109" />
             </state>
           </provider>
         </entry>
@@ -78,9 +86,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>One library that combines Google Fit from Android and Apple Health from iOS</find>
-      <find>0.0.1</find>
-      <find>0.1.1</find>
       <find />
       <find>setState(() {});</find>
       <find>0.1.2</find>
@@ -105,9 +110,12 @@
       <find>hk</find>
       <find>follow the</find>
       <find>1.1.5</find>
-      <find>print</find>
       <find>pri</find>
       <find>log</find>
+      <find>print</find>
+      <find>1.1.6</find>
+      <find>gfblood</find>
+      <find>1.1.7</find>
     </findStrings>
     <replaceStrings>
       <replace>'getData'</replace>
@@ -122,6 +130,8 @@
       <replace>0.1.6</replace>
       <replace>0.1.7</replace>
       <replace>1.1.6</replace>
+      <replace>1.1.7</replace>
+      <replace>1.1.8</replace>
     </replaceStrings>
   </component>
   <component name="Git.Settings">
@@ -266,7 +276,7 @@
       <workItem from="1563528143169" duration="7864000" />
       <workItem from="1563706466703" duration="9817000" />
       <workItem from="1563786533285" duration="2704000" />
-      <workItem from="1563875532566" duration="2906000" />
+      <workItem from="1563875532566" duration="3303000" />
     </task>
     <task id="LOCAL-00001" summary="apple health kind of works">
       <created>1563382233369</created>
@@ -310,17 +320,24 @@
       <option name="project" value="LOCAL" />
       <updated>1563886839948</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Google fit integration completed">
+      <created>1563889275139</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1563889275139</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50316000" />
+    <option name="totallyTimeSpent" value="50713000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1680" height="1050" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.3003663" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.3003663" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Image Layers" order="3" />
@@ -336,10 +353,10 @@
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
       <window_info anchor="bottom" id="Dart Analysis" order="7" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="8" sideWeight="0.49946752" visible="true" weight="0.23673469" />
+      <window_info anchor="bottom" id="Terminal" order="8" sideWeight="0.49946752" weight="0.23673469" />
       <window_info anchor="bottom" id="Docker" order="9" show_stripe_button="false" />
       <window_info anchor="bottom" id="Event Log" order="10" sideWeight="0.50159746" side_tool="true" weight="0.34059405" />
-      <window_info anchor="bottom" id="Messages" order="11" weight="0.32871288" />
+      <window_info anchor="bottom" id="Messages" order="11" visible="true" weight="0.32857144" />
       <window_info anchor="bottom" id="Multi-OS Engine" order="12" />
       <window_info anchor="bottom" id="Database Changes" order="13" />
       <window_info anchor="bottom" id="Version Control" order="14" weight="0.32970297" />
@@ -468,18 +485,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" column="109" lean-forward="true" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="109" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/README.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="270">
-            <caret line="18" lean-forward="true" selection-start-line="18" selection-end-line="18" />
+            <caret line="18" selection-start-line="18" selection-end-line="18" />
           </first_editor>
           <second_editor />
         </state>
@@ -488,7 +498,7 @@
     <entry file="file://$PROJECT_DIR$/android/src/main/kotlin/net/petleo/flutter_health/FlutterHealthPlugin.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
-          <caret line="31" lean-forward="true" selection-start-line="31" selection-end-line="31" />
+          <caret line="31" selection-start-line="31" selection-end-line="31" />
           <folding>
             <element signature="e#35#1162#0" expanded="true" />
           </folding>
@@ -497,11 +507,18 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/lib/flutter_health.dart">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="392">
-          <caret line="91" column="35" selection-start-line="91" selection-start-column="35" selection-end-line="91" selection-end-column="35" />
+        <state relative-caret-position="460">
+          <caret line="105" column="51" selection-start-line="105" selection-start-column="51" selection-end-line="105" selection-end-column="51" />
           <folding>
             <element signature="e#0#20#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pubspec.yaml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="1" column="109" selection-start-line="1" selection-start-column="13" selection-end-line="1" selection-end-column="109" />
         </state>
       </provider>
     </entry>

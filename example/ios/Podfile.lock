@@ -1,6 +1,6 @@
 PODS:
   - Flutter (1.0.0)
-  - flutter_health (1.1.6):
+  - flutter_health (1.1.8):
     - Flutter
 
 DEPENDENCIES:
