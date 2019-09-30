@@ -69,8 +69,8 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent): Boolean {
         Log.d("FLUTTER_HEALTH", "GOOGLE FIT ON ACTIVITY RESULT $resultCode")
-        if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
+        if (requestCode == GOOGLE_FIT_PERMISSIONS_REQUEST_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
                 Log.d("FLUTTER_HEALTH", "Access Granted!")
                 mResult?.success(true)
             } else {
