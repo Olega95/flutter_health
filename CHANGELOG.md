@@ -1,3 +1,6 @@
+## 1.2.0
+Provide compatibility with Gradle 5.x
+
 ## 1.1.9
 
 Apple health kit for flutter (Flutter Health) initial release
