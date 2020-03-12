@@ -128,9 +128,9 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                         print("Either there are no values or the user did not allow getting this value")
                         result("Either there are no values or the user did not allow getting this value")
                     }
-                    return
+                    return                
+                    HKHealthStore().execute(query)
                 }
-                HKHealthStore().execute(query)
             } else{
                 print("Something wrong with request")
                 result("Unsupported version or data type")
@@ -140,6 +140,83 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
             result("Unsupported version or data type")
         }
         print("Unsupported version")
+    }else if(call.method.elementsEqual("getSummary")){
+        let arguments = call.arguments as? NSDictionary
+        let index = (arguments?["index"] as? Int) ?? -1
+        let startDate = (arguments?["startDate"] as? NSNumber) ?? 0
+        let endDate = (arguments?["endDate"] as? NSNumber) ?? 0
+        
+        
+        let dateFrom = Date(timeIntervalSince1970: startDate.doubleValue / 1000)
+        let dateTo = Date(timeIntervalSince1970: endDate.doubleValue / 1000)
+
+        if #available(iOS 11.0, *) {
+            let allTypes = [
+                HKSampleType.quantityType(forIdentifier: .bodyFatPercentage)!,
+                HKSampleType.quantityType(forIdentifier: .height)!,
+                HKSampleType.quantityType(forIdentifier: .bodyMassIndex)!,
+                HKSampleType.quantityType(forIdentifier: .waistCircumference)!,
+                HKSampleType.quantityType(forIdentifier: .stepCount)!,
+                HKSampleType.quantityType(forIdentifier: .basalEnergyBurned)!,
+                HKSampleType.quantityType(forIdentifier: .activeEnergyBurned)!,
+                HKSampleType.quantityType(forIdentifier: .heartRate)!,
+                HKSampleType.quantityType(forIdentifier: .bodyTemperature)!,
+                HKSampleType.quantityType(forIdentifier: .bloodPressureSystolic)!,
+                HKSampleType.quantityType(forIdentifier: .bloodPressureDiastolic)!,
+                HKSampleType.quantityType(forIdentifier: .restingHeartRate)!,
+                HKSampleType.quantityType(forIdentifier: .walkingHeartRateAverage)!,
+                HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
+                HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
+                HKSampleType.quantityType(forIdentifier: .electrodermalActivity)!,
+                ]
+            print("INDEX IS " , index)
+            print("COUNT IS " , allTypes.count)
+            if(index >= 0 && index < allTypes.count){
+                let dataType = allTypes[index]
+                print("DATA TYPE IS ", dataType)
+
+                //  Set the Predicates & Interval
+                let predicate = HKQuery.predicateForSamples(withStart: dateFrom, end: dateTo, options: .strictStartDate)
+                var interval = DateComponents()
+                interval.day = 1
+
+                //  Perform the Query
+                let query = HKStatisticsCollectionQuery(quantityType: dataType, quantitySamplePredicate: predicate, options: [.cumulativeSum], anchorDate: dateFrom as Date, intervalComponents:interval)
+
+                query.initialResultsHandler = { query, samplesOrNil, error in
+
+                    guard let samples = samplesOrNil as? [HKQuantitySample] else {
+                        result(FlutterError(code: "FlutterHealth", message: "Results are null", details: error))
+                        return
+                    }
+
+                    if(samples != nil){
+                        result(results.map { sample -> NSDictionary in
+                            let unit = self.unitFromDartType(type: index)
+                                return [
+                                    "value": sample.quantity.doubleValue(for: unit),
+                                    "unit": unit.unitString,
+                                    "date_from": Int(sample.startDate.timeIntervalSince1970 * 1000),
+                                    "date_to": Int(sample.endDate.timeIntervalSince1970 * 1000),
+                                    "data_type_index": index,
+                                ]
+                        })
+                    } else {
+                        print("Either there are no values or the user did not allow getting this value")
+                        result("Either there are no values or the user did not allow getting this value")
+                    }
+                    return                
+                    HKHealthStore().execute(query)
+                }
+            } else{
+                print("Something wrong with request")
+                result("Unsupported version or data type")
+            }
+        } else {
+            print("Unsupported version 1")
+            result("Unsupported version or data type")
+        }
+        print("Unsupported version")                
     }else if(call.method.elementsEqual("getHeartAlerts")){
         let arguments = call.arguments as? NSDictionary
         let index = (arguments?["index"] as? Int) ?? -1
