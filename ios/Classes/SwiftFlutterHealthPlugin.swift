@@ -129,8 +129,9 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                         result("Either there are no values or the user did not allow getting this value")
                     }
                     return                
-                    HKHealthStore().execute(query)
                 }
+                HKHealthStore().execute(query)
+
             } else{
                 print("Something wrong with request")
                 result("Unsupported version or data type")
@@ -191,7 +192,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                     }
 
                     if(samples != nil){
-                        result(results.map { sample -> NSDictionary in
+                        result(samples.map { sample -> NSDictionary in
                             let unit = self.unitFromDartType(type: index)
                                 return [
                                     "value": sample.quantity.doubleValue(for: unit),
