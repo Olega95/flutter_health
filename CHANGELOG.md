@@ -1,3 +1,6 @@
+## 1.2.3
+Adding Weight
+
 ## 1.2.1
 Updating google fit and auth in gradle
 
