@@ -30,18 +30,18 @@ class _MyAppState extends State<MyApp> {
       setState(() {});
     });*/
 
-    DateTime startDate = DateTime.utc(2019, 07, 01);
+    DateTime startDate = DateTime.utc(2020, 02, 01);
     DateTime endDate = DateTime.now();
     Future.delayed(Duration(seconds: 2), () async {
       _isAuthorized = await FlutterHealth.requestAuthorization();
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKBodyFat(startDate, endDate));
+//      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCountSummary(startDate, endDate));
+//      setState(() {});
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKWeight(startDate, endDate));
       setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKHeight(startDate, endDate));
-      setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCount(startDate, endDate));
-      setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKHeartRate(startDate, endDate));
-      setState(() {});
+//      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCount(startDate, endDate));
+//      setState(() {});
+//      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKHeartRate(startDate, endDate));
+//      setState(() {});
       /* if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHeight(startDate, endDate));
       setState(() {});
       if (_isAuthorized) _dataList.addAll(await FlutterHealth.getBodyMass(startDate, endDate));

@@ -128,16 +128,20 @@ class FlutterHealth {
     return getHKHealthData(startDate, endDate, 15);
   }
 
-  static Future<List<HKHealthData>> getHKHighHeart(DateTime startDate, DateTime endDate) async {
-    return getHKHeartData(startDate, endDate, 16);
+  static Future<List<HKHealthData>> getHKWeight(DateTime startDate, DateTime endDate) async {
+    return getHKHealthData(startDate, endDate, 16);
   }
 
-  static Future<List<HKHealthData>> getHKLowHeart(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKHighHeart(DateTime startDate, DateTime endDate) async {
     return getHKHeartData(startDate, endDate, 17);
   }
 
-  static Future<List<HKHealthData>> getHKIrregular(DateTime startDate, DateTime endDate) async {
+  static Future<List<HKHealthData>> getHKLowHeart(DateTime startDate, DateTime endDate) async {
     return getHKHeartData(startDate, endDate, 18);
+  }
+
+  static Future<List<HKHealthData>> getHKIrregular(DateTime startDate, DateTime endDate) async {
+    return getHKHeartData(startDate, endDate, 19);
   }
 
   static Future<List<HKHealthData>> getHKAllData(DateTime startDate, DateTime endDate) async {
@@ -225,6 +229,7 @@ class FlutterHealth {
     args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
     try {
       List result = await _channel.invokeMethod('getSummary', args);
+      print('result coming back is $result');
       var hkHealthData = List<HKHealthData>.from(result.map((i) => HKHealthData.fromJson(Map<String, dynamic>.from(i))));
       return hkHealthData;
     } catch (e) {

@@ -50,6 +50,8 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
                 HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                 HKSampleType.quantityType(forIdentifier: .electrodermalActivity)!,
+                HKSampleType.quantityType(forIdentifier: .bodyMass)!,
+
                 ]))
             healthStore.requestAuthorization(toShare: nil, read: allTypes) { (success, error) in
                 if !success {
@@ -90,6 +92,7 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
                 HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                 HKSampleType.quantityType(forIdentifier: .electrodermalActivity)!,
+                HKSampleType.quantityType(forIdentifier: .bodyMass)!,
                 ]
             print("INDEX IS " , index)
             print("COUNT IS " , allTypes.count)
@@ -169,9 +172,10 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 HKSampleType.quantityType(forIdentifier: .oxygenSaturation)!,
                 HKSampleType.quantityType(forIdentifier: .bloodGlucose)!,
                 HKSampleType.quantityType(forIdentifier: .electrodermalActivity)!,
+                HKSampleType.quantityType(forIdentifier: .bodyMass)!,
                 ]
-            print("INDEX IS " , index)
-            print("COUNT IS " , allTypes.count)
+            print("INDEX IN SUMMARY IS " , index)
+            print("COUNT IN SUMMARY IS " , allTypes.count)
             if(index >= 0 && index < allTypes.count){
                 let dataType = allTypes[index]
                 print("DATA TYPE IS ", dataType)
@@ -190,10 +194,11 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                         result(FlutterError(code: "FlutterHealth", message: "Results are null", details: error))
                         return
                     }
-
+                    print("SAMPLES ARE ", samples)
                     if(samples != nil){
                         result(samples.map { sample -> NSDictionary in
                             let unit = self.unitFromDartType(type: index)
+                            print("VALUE IN SUM IS ", sample.quantity.doubleValue(for: unit))
                                 return [
                                     "value": sample.quantity.doubleValue(for: unit),
                                     "unit": unit.unitString,
@@ -311,6 +316,8 @@ public class SwiftFlutterHealthPlugin: NSObject, FlutterPlugin {
                 return HKUnit.init(from: "mg/dl")
             case 15:
                 return HKUnit.siemen()
+            case 16:
+                return HKUnit.gramUnit(with: HKMetricPrefix.kilo)
             default:
                 return HKUnit.count()
             }
