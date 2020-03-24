@@ -1,10 +1,17 @@
 package net.petleo.flutter_health
 
 import android.app.Activity
+import android.content.Intent
+import android.os.Handler
+import android.os.Looper
+import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.fitness.Fitness
 import com.google.android.gms.fitness.FitnessOptions
 import com.google.android.gms.fitness.data.DataType
+import com.google.android.gms.fitness.data.Field
+import com.google.android.gms.fitness.data.HealthDataTypes
+import com.google.android.gms.fitness.data.HealthFields
 import com.google.android.gms.fitness.request.DataReadRequest
 import com.google.android.gms.fitness.result.DataReadResponse
 import com.google.android.gms.tasks.Tasks
@@ -12,19 +19,10 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import io.flutter.plugin.common.PluginRegistry.Registrar
-import android.content.Intent
-import android.os.Handler
-import android.util.Log
 import io.flutter.plugin.common.PluginRegistry.ActivityResultListener
-import java.util.*
+import io.flutter.plugin.common.PluginRegistry.Registrar
 import java.util.concurrent.TimeUnit
 import kotlin.concurrent.thread
-import android.os.Looper
-import com.google.android.gms.fitness.data.Field
-import com.google.android.gms.fitness.data.HealthDataTypes
-import com.google.android.gms.fitness.data.HealthFields
-import kotlin.collections.HashMap
 
 const val GOOGLE_FIT_PERMISSIONS_REQUEST_CODE = 1111
 
@@ -85,6 +83,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
     val fitnessOptions = FitnessOptions.builder()
             .addDataType(DataType.TYPE_BODY_FAT_PERCENTAGE, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
@@ -125,6 +124,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                 6 -> HealthDataTypes.TYPE_BLOOD_PRESSURE
                 7 -> HealthDataTypes.TYPE_OXYGEN_SATURATION
                 8 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
+                9 -> DataType.TYPE_WEIGHT
                 else -> DataType.TYPE_STEP_COUNT_DELTA
             }
             thread {
@@ -150,12 +150,12 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                         } catch (e2: Exception) {
                             try {
                                 it.getValue(fields[type ?: 0]).asString()
-                            }catch (e3: Exception){
+                            } catch (e3: Exception) {
                                 Log.e("FLUTTER_HEALTH::ERROR", e3.toString())
                             }
                         }
                     }
-                    if(dataType == HealthDataTypes.TYPE_BLOOD_PRESSURE)
+                    if (dataType == HealthDataTypes.TYPE_BLOOD_PRESSURE)
                         map["value2"] = try {
                             it.getValue(HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC).asFloat()
                         } catch (e1: Exception) {
@@ -164,7 +164,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                             } catch (e2: Exception) {
                                 try {
                                     it.getValue(fields[type ?: 0]).asString()
-                                }catch (e3: Exception){
+                                } catch (e3: Exception) {
                                     Log.e("FLUTTER_HEALTH::ERROR", e3.toString())
                                 }
                             }
@@ -172,7 +172,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                     map["date_from"] = it.getStartTime(TimeUnit.MILLISECONDS)
                     map["date_to"] = it.getEndTime(TimeUnit.MILLISECONDS)
                     map["unit"] = ""
-                    map["data_type_index"] = type?:-1
+                    map["data_type_index"] = type ?: -1
                     return@map map
                 }
                 activity.runOnUiThread { result.success(map) }

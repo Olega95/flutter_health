@@ -97,7 +97,6 @@ class FlutterHealth {
     return await getGFHealthData(startDate, endDate, 6);
   }
 
-
   static Future<List<HKHealthData>> getHKBloodPressureSys(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 11);
   }
@@ -114,7 +113,6 @@ class FlutterHealth {
     return getGFHealthData(startDate, endDate, 7);
   }
 
-
   static Future<List<HKHealthData>> getHKBloodGlucose(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 14);
   }
@@ -123,13 +121,16 @@ class FlutterHealth {
     return getGFHealthData(startDate, endDate, 8);
   }
 
-
   static Future<List<HKHealthData>> getHKElectrodermalActivity(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 15);
   }
 
   static Future<List<HKHealthData>> getHKWeight(DateTime startDate, DateTime endDate) async {
     return getHKHealthData(startDate, endDate, 16);
+  }
+
+  static Future<List<GFHealthData>> getGFWeight(DateTime startDate, DateTime endDate) async {
+    return getGFHealthData(startDate, endDate, 9);
   }
 
   static Future<List<HKHealthData>> getHKHighHeart(DateTime startDate, DateTime endDate) async {
@@ -331,7 +332,8 @@ enum HKDataType {
   ELECTRODERMAL_ACTIVITY,
   HIGH_HEART_RATE_EVENT,
   LOW_HEART_RATE_EVENT,
-  IRREGULAR_HEART_RATE_EVENT
+  IRREGULAR_HEART_RATE_EVENT,
+  WEIGHT,
 }
 
 enum GFDataType {
@@ -344,4 +346,5 @@ enum GFDataType {
   BLOOD_PRESSURE,
   BLOOD_OXYGEN,
   BLOOD_GLUCOSE,
+  WEIGHT,
 }

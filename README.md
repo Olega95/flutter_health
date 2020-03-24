@@ -40,7 +40,7 @@ await FlutterHealth.checkIfHealthDataAvailable()
 ```$xslt
 await FlutterHealth.requestAuthorization()
 ``` 
-######For now, you can request all of the options provided by the library
+###### For now, you can request all of the options provided by the library
 
 
 #### Get the samples of data types authorized by the user within the given time range
@@ -146,7 +146,7 @@ Just follow [this setup](https://developers.google.com/fit/android/get-started).
 ```$xslt
 await FlutterHealth.requestAuthorization()
 ``` 
-######For now, you can request all of the options provided by the library
+###### For now, you can request all of the options provided by the library
 
 
 #### Get the samples of data types authorized by the user within the given time range
