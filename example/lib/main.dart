@@ -30,13 +30,13 @@ class _MyAppState extends State<MyApp> {
       setState(() {});
     });*/
 
-    DateTime startDate = DateTime.utc(2020, 02, 01);
+    DateTime startDate = DateTime.utc(2020, 03, 21);
     DateTime endDate = DateTime.now();
     Future.delayed(Duration(seconds: 2), () async {
       _isAuthorized = await FlutterHealth.requestAuthorization();
 //      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCountSummary(startDate, endDate));
 //      setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKWeight(startDate, endDate));
+      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKAllDataWithCombinedBP(startDate, endDate));
       setState(() {});
 //      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCount(startDate, endDate));
 //      setState(() {});
