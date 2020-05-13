@@ -84,7 +84,6 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
             .addDataType(DataType.TYPE_BODY_FAT_PERCENTAGE, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ)
-            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
             .addDataType(HealthDataTypes.TYPE_BODY_TEMPERATURE, FitnessOptions.ACCESS_READ)
@@ -113,23 +112,23 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
             val type = call.argument<Int>("index")
             val startTime = call.argument<Long>("startDate")
             val endTime = call.argument<Long>("endDate")
-            val fields = listOf(Field.FIELD_PERCENTAGE, Field.FIELD_HEIGHT, Field.FIELD_STEPS, Field.FIELD_CALORIES, Field.FIELD_BPM, HealthFields.FIELD_BODY_TEMPERATURE, HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC, HealthFields.FIELD_OXYGEN_SATURATION, HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL)
+            val fields = listOf(Field.FIELD_PERCENTAGE, Field.FIELD_HEIGHT, Field.FIELD_CALORIES, Field.FIELD_BPM, HealthFields.FIELD_BODY_TEMPERATURE, HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC, HealthFields.FIELD_OXYGEN_SATURATION, HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL, Field.FIELD_WEIGHT)
+            Log.d("type is ", type.toString())
+
             val dataType = when (type) {
                 0 -> DataType.TYPE_BODY_FAT_PERCENTAGE
                 1 -> DataType.TYPE_HEIGHT
-                2 -> DataType.TYPE_STEP_COUNT_DELTA
-                3 -> DataType.TYPE_CALORIES_EXPENDED
-                4 -> DataType.TYPE_HEART_RATE_BPM
-                5 -> HealthDataTypes.TYPE_BODY_TEMPERATURE
-                6 -> HealthDataTypes.TYPE_BLOOD_PRESSURE
-                7 -> HealthDataTypes.TYPE_OXYGEN_SATURATION
-                8 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
-                9 -> DataType.TYPE_WEIGHT
-                else -> DataType.TYPE_STEP_COUNT_DELTA
+                2 -> DataType.TYPE_CALORIES_EXPENDED
+                3 -> DataType.TYPE_HEART_RATE_BPM
+                4 -> HealthDataTypes.TYPE_BODY_TEMPERATURE
+                5 -> HealthDataTypes.TYPE_BLOOD_PRESSURE
+                6 -> HealthDataTypes.TYPE_OXYGEN_SATURATION
+                7 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
+                8 -> DataType.TYPE_WEIGHT
+                else -> DataType.TYPE_WEIGHT
             }
             thread {
                 val gsa = GoogleSignIn.getAccountForExtension(activity.applicationContext, fitnessOptions)
-
                 val response = Fitness.getHistoryClient(activity.applicationContext, gsa)
                         .readData(DataReadRequest.Builder()
                                 .read(dataType)

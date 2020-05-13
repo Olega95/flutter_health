@@ -175,9 +175,9 @@ class FlutterHealth {
 
   static Future<List<GFHealthData>> getGFAllData(DateTime startDate, DateTime endDate) async {
     List<GFHealthData> allData = new List<GFHealthData>();
-    var healthData = List.from(GFDataType.values);
+//    var healthData = List.from(GFDataType.values);
 
-    for (int i = 0; i < GFDataType.values.length; i++) {
+    for (int i = 0; i < GFDataTypeWithoutSteps.values.length; i++) {
       allData.addAll(await getGFHealthData(startDate, endDate, i));
     }
     return allData;
@@ -288,7 +288,7 @@ class GFHealthData {
   String unit;
   int dateFrom;
   int dateTo;
-  GFDataType dataType;
+  GFDataTypeWithoutSteps dataType;
 
   GFHealthData({this.value, this.unit, this.dateFrom, this.dateTo, this.dataType});
 
@@ -298,7 +298,7 @@ class GFHealthData {
     unit = json['unit'];
     dateFrom = json['date_from'];
     dateTo = json['date_to'];
-    dataType = GFDataType.values[json['data_type_index']];
+    dataType = GFDataTypeWithoutSteps.values[json['data_type_index']];
   }
 
   Map<String, dynamic> toJson() {
@@ -308,7 +308,7 @@ class GFHealthData {
     data['unit'] = this.unit;
     data['date_from'] = this.dateFrom;
     data['date_to'] = this.dateTo;
-    data['data_type_index'] = GFDataType.values.indexOf(this.dataType);
+    data['data_type_index'] = GFDataTypeWithoutSteps.values.indexOf(this.dataType);
     return data;
   }
 }
@@ -330,7 +330,6 @@ enum HKDataType {
   BLOOD_OXYGEN,
   BLOOD_GLUCOSE,
   ELECTRODERMAL_ACTIVITY,
-  WEIGHT,
   HIGH_HEART_RATE_EVENT,
   LOW_HEART_RATE_EVENT,
   IRREGULAR_HEART_RATE_EVENT,
@@ -340,6 +339,18 @@ enum GFDataType {
   BODY_FAT,
   HEIGHT,
   STEPS,
+  CALORIES,
+  HEART_RATE,
+  BODY_TEMPERATURE,
+  BLOOD_PRESSURE,
+  BLOOD_OXYGEN,
+  BLOOD_GLUCOSE,
+  WEIGHT,
+}
+
+enum GFDataTypeWithoutSteps {
+  BODY_FAT,
+  HEIGHT,
   CALORIES,
   HEART_RATE,
   BODY_TEMPERATURE,
