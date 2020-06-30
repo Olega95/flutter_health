@@ -85,6 +85,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
             .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
+            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
             .addDataType(HealthDataTypes.TYPE_BODY_TEMPERATURE, FitnessOptions.ACCESS_READ)
             .addDataType(HealthDataTypes.TYPE_BLOOD_PRESSURE, FitnessOptions.ACCESS_READ)
@@ -119,12 +120,13 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                 0 -> DataType.TYPE_BODY_FAT_PERCENTAGE
                 1 -> DataType.TYPE_HEIGHT
                 2 -> DataType.TYPE_CALORIES_EXPENDED
-                3 -> DataType.TYPE_HEART_RATE_BPM
-                4 -> HealthDataTypes.TYPE_BODY_TEMPERATURE
-                5 -> HealthDataTypes.TYPE_BLOOD_PRESSURE
-                6 -> HealthDataTypes.TYPE_OXYGEN_SATURATION
-                7 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
-                8 -> DataType.TYPE_WEIGHT
+                3 -> DataType.TYPE_STEP_COUNT_DELTA
+                4 -> DataType.TYPE_HEART_RATE_BPM
+                5 -> HealthDataTypes.TYPE_BODY_TEMPERATURE
+                6 -> HealthDataTypes.TYPE_BLOOD_PRESSURE
+                7 -> HealthDataTypes.TYPE_OXYGEN_SATURATION
+                8 -> HealthDataTypes.TYPE_BLOOD_GLUCOSE
+                9 -> DataType.TYPE_WEIGHT
                 else -> DataType.TYPE_WEIGHT
             }
             thread {
