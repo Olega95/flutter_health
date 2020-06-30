@@ -97,7 +97,13 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "requestAuthorization") {
             mResult = result
-
+//
+//            if (ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.ACTIVITY_RECOGNITION)
+//                    != PackageManager.PERMISSION_GRANTED) {
+//                ActivityCompat.requestPermissions(thisActivity,
+//                        arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
+//                        MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
+//            }
             if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions)) {
                 Log.d("authResult 111", activity.localClassName)
                 GoogleSignIn.requestPermissions(
