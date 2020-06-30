@@ -13,7 +13,8 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _healthKitOutput;
-  var _dataList = List<HKHealthData>();
+  var _hkDataList = List<HKHealthData>();
+  var _gfDataList = List<GFHealthData>();
   var str = "";
   bool _isAuthorized = true;
 
@@ -34,10 +35,10 @@ class _MyAppState extends State<MyApp> {
     DateTime endDate = DateTime.now();
     Future.delayed(Duration(seconds: 2), () async {
       _isAuthorized = await FlutterHealth.requestAuthorization();
-//      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCountSummary(startDate, endDate));
-//      setState(() {});
-      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKAllDataWithCombinedBP(startDate, endDate));
+      if (_isAuthorized) _gfDataList.addAll(await FlutterHealth.getGFAllData(startDate, endDate));
       setState(() {});
+//      if (_isAuthorized) _hkDataList.addAll(await FlutterHealth.getHKAllDataWithCombinedBPWithoutSteps(startDate, endDate));
+//      setState(() {});
 //      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKStepCount(startDate, endDate));
 //      setState(() {});
 //      if (_isAuthorized) _dataList.addAll(await FlutterHealth.getHKHeartRate(startDate, endDate));
@@ -96,15 +97,15 @@ class _MyAppState extends State<MyApp> {
             )
           ],
         ),
-        body: _dataList.isEmpty
+        body: _hkDataList.isEmpty
             ? Text('Running on: $_healthKitOutput\n')
             : ListView.builder(
-            itemCount: _dataList.length,
+            itemCount: _hkDataList.length,
             itemBuilder: (_, index) =>
                 ListTile(
-                  title: Text(_dataList[index].value.toString() + " " + _dataList[index].value2.toString()),
-                  trailing: Text(_dataList[index].unit),
-                  subtitle: Text(DateTime.fromMillisecondsSinceEpoch(_dataList[index].dateFrom).toIso8601String()),
+                  title: Text(_hkDataList[index].value.toString() + " " + _hkDataList[index].value2.toString()),
+                  trailing: Text(_hkDataList[index].unit),
+                  subtitle: Text(DateTime.fromMillisecondsSinceEpoch(_hkDataList[index].dateFrom).toIso8601String()),
                   /*title: Text(str),
                   trailing: Text(str),
                   subtitle: Text(str),*/

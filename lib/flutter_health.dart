@@ -169,19 +169,29 @@ class FlutterHealth {
       var gfHealthData = List<GFHealthData>.from(result.map((i) => GFHealthData.fromJson(Map<String, dynamic>.from(i))));
       return gfHealthData;
     } catch (e, s) {
+      print('exception is $e $s');
       return const [];
     }
   }
 
   static Future<List<GFHealthData>> getGFAllData(DateTime startDate, DateTime endDate) async {
     List<GFHealthData> allData = new List<GFHealthData>();
-//    var healthData = List.from(GFDataType.values);
+    var healthData = List.from(GFDataType.values);
 
+    for (int i = 0; i < healthData.length; i++) {
+      allData.addAll(await getGFHealthData(startDate, endDate, i));
+    }
+    return allData;
+  }
+
+  static Future<List<GFHealthData>> getGFAllDataWithoutSteps(DateTime startDate, DateTime endDate) async {
+    List<GFHealthData> allData = new List<GFHealthData>();
     for (int i = 0; i < GFDataTypeWithoutSteps.values.length; i++) {
       allData.addAll(await getGFHealthData(startDate, endDate, i));
     }
     return allData;
   }
+
 
   static Future<List<HKHealthData>> getHKAllDataWithCombinedBP(DateTime startDate, DateTime endDate) async {
     List<HKHealthData> allData = new List<HKHealthData>();
@@ -209,8 +219,37 @@ class FlutterHealth {
     return allData;
   }
 
+  static Future<List<HKHealthData>> getHKAllDataWithCombinedBPWithoutSteps(DateTime startDate, DateTime endDate) async {
+    List<HKHealthData> allData = new List<HKHealthData>();
+    var healthData = List.from(HKDataType.values);
+    healthData.removeRange(
+        HKDataType.values.indexOf(HKDataType.HIGH_HEART_RATE_EVENT), HKDataType.values.indexOf(HKDataType.IRREGULAR_HEART_RATE_EVENT));
+    List<HKHealthData> bpRecords = [];
+    for (int i = 0; i < healthData.length; i++) {
+      if (healthData[i] != HKDataType.STEPS) {
+        if (healthData[i] == HKDataType.BLOOD_PRESSURE_SYSTOLIC) {
+          bpRecords = await getHKHealthData(startDate, endDate, i);
+        } else if (healthData[i] == HKDataType.BLOOD_PRESSURE_DIASTOLIC) {
+          var dia = await getHKHealthData(startDate, endDate, i);
+          for (int j = 0; j < dia.length; j++) {
+            try {
+              bpRecords[j].value2 = dia[j].value;
+            } catch (e) {}
+          }
+          allData.addAll(bpRecords);
+        } else
+          allData.addAll(await getHKHealthData(startDate, endDate, i));
+      }
+    }
+    for (int i = HKDataType.values.indexOf(HKDataType.HIGH_HEART_RATE_EVENT); i < HKDataType.values.length; i++) {
+      allData.addAll(await getHKHeartData(startDate, endDate, i));
+    }
+    return allData;
+  }
+
   static Future<List<HKHealthData>> getHKHealthData(DateTime startDate, DateTime endDate, int type) async {
     Map<String, dynamic> args = {};
+    print('type is $type');
     args.putIfAbsent('index', () => type);
     args.putIfAbsent('startDate', () => startDate.millisecondsSinceEpoch);
     args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
