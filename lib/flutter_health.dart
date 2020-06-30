@@ -192,6 +192,14 @@ class FlutterHealth {
     return allData;
   }
 
+  static Future<List<GFHealthData>> getSpecificGFDataList(DateTime startDate, DateTime endDate, List<GFDataType> list) async {
+    List<GFHealthData> allData = new List<GFHealthData>();
+    for (int i = 0; i < list.length; i++) {
+      allData.addAll(await getGFHealthData(startDate, endDate, i));
+    }
+    return allData;
+  }
+
 
   static Future<List<HKHealthData>> getHKAllDataWithCombinedBP(DateTime startDate, DateTime endDate) async {
     List<HKHealthData> allData = new List<HKHealthData>();
@@ -203,6 +211,29 @@ class FlutterHealth {
       if (healthData[i] == HKDataType.BLOOD_PRESSURE_SYSTOLIC) {
         bpRecords = await getHKHealthData(startDate, endDate, i);
       } else if (healthData[i] == HKDataType.BLOOD_PRESSURE_DIASTOLIC) {
+        var dia = await getHKHealthData(startDate, endDate, i);
+        for (int j = 0; j < dia.length; j++) {
+          try {
+            bpRecords[j].value2 = dia[j].value;
+          } catch (e) {}
+        }
+        allData.addAll(bpRecords);
+      } else
+        allData.addAll(await getHKHealthData(startDate, endDate, i));
+    }
+    for (int i = HKDataType.values.indexOf(HKDataType.HIGH_HEART_RATE_EVENT); i < HKDataType.values.length; i++) {
+      allData.addAll(await getHKHeartData(startDate, endDate, i));
+    }
+    return allData;
+  }
+
+  static Future<List<HKHealthData>> getHKAllDataWithCombinedBPWithSpecificDataTypes(DateTime startDate, DateTime endDate, List<HKDataType> list) async {
+    List<HKHealthData> allData = new List<HKHealthData>();
+    List<HKHealthData> bpRecords = [];
+    for (int i = 0; i < list.length; i++) {
+      if (list[i] == HKDataType.BLOOD_PRESSURE_SYSTOLIC) {
+        bpRecords = await getHKHealthData(startDate, endDate, i);
+      } else if (list[i] == HKDataType.BLOOD_PRESSURE_DIASTOLIC) {
         var dia = await getHKHealthData(startDate, endDate, i);
         for (int j = 0; j < dia.length; j++) {
           try {
@@ -388,9 +419,7 @@ enum GFDataType {
 }
 
 enum GFDataTypeWithoutSteps {
-  BODY_FAT,
   HEIGHT,
-  CALORIES,
   HEART_RATE,
   BODY_TEMPERATURE,
   BLOOD_PRESSURE,

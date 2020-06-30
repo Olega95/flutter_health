@@ -2,13 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="739b312a-03c1-49b7-9de5-5fbf264376f7" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_health/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/.symlinks/plugins/flutter_health/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Podfile.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Podfile.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" beforeDir="false" afterPath="$PROJECT_DIR$/example/ios/Runner.xcodeproj/project.pbxproj" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/ios/Runner.xcworkspace/xcshareddata/WorkspaceSettings.xcsettings" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/example/lib/main.dart" beforeDir="false" afterPath="$PROJECT_DIR$/example/lib/main.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/example/pubspec.lock" beforeDir="false" afterPath="$PROJECT_DIR$/example/pubspec.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/lib/flutter_health.dart" beforeDir="false" afterPath="$PROJECT_DIR$/lib/flutter_health.dart" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pubspec.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/pubspec.yaml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -128,7 +124,7 @@
       <workItem from="1589544808920" duration="7000" />
       <workItem from="1592496703288" duration="644000" />
       <workItem from="1592813027641" duration="434000" />
-      <workItem from="1593506231939" duration="2432000" />
+      <workItem from="1593506231939" duration="3428000" />
     </task>
     <task id="LOCAL-00001" summary="apple health kind of works">
       <created>1563382233369</created>
@@ -228,7 +224,14 @@
       <option name="project" value="LOCAL" />
       <updated>1589386176329</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="method added for apple health to get all data except steps">
+      <created>1593508880754</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1593508880755</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -251,17 +254,18 @@
     <MESSAGE value="changed version code" />
     <MESSAGE value="quick fix for authorization issue" />
     <MESSAGE value="versionn numbers" />
-    <option name="LAST_COMMIT_MESSAGE" value="versionn numbers" />
+    <MESSAGE value="method added for apple health to get all data except steps" />
+    <option name="LAST_COMMIT_MESSAGE" value="method added for apple health to get all data except steps" />
   </component>
   <component name="WindowStateProjectService">
     <state x="275" y="-875" key="#Project_Structure" timestamp="1589304066999">
       <screen x="-285" y="-1080" width="1920" height="1080" />
     </state>
     <state x="275" y="-875" key="#Project_Structure/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1589304066999" />
-    <state x="134" y="-1018" key="CommitChangelistDialog2" timestamp="1593508834478">
+    <state x="134" y="-1018" key="CommitChangelistDialog2" timestamp="1593508880160">
       <screen x="-285" y="-1080" width="1920" height="1080" />
     </state>
-    <state x="134" y="-1018" key="CommitChangelistDialog2/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1593508834478" />
+    <state x="134" y="-1018" key="CommitChangelistDialog2/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1593508880160" />
     <state x="314" y="52" key="CommitChangelistDialog2/0.0.1440.900@0.0.1440.900" timestamp="1585057437367" />
     <state x="-152" y="-979" width="1240" height="700" key="DiffContextDialog" timestamp="1589386045099">
       <screen x="-285" y="-1080" width="1920" height="1080" />
@@ -295,10 +299,10 @@
       <screen x="-285" y="-1080" width="1920" height="1080" />
     </state>
     <state x="466" y="-822" key="RollbackChangesDialog/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1589386047186" />
-    <state x="142" y="-852" key="Vcs.Push.Dialog.v2" timestamp="1593508859177">
+    <state x="142" y="-852" key="Vcs.Push.Dialog.v2" timestamp="1593508881758">
       <screen x="-285" y="-1080" width="1920" height="1080" />
     </state>
-    <state x="142" y="-852" key="Vcs.Push.Dialog.v2/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1593508859177" />
+    <state x="142" y="-852" key="Vcs.Push.Dialog.v2/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1593508881758" />
     <state x="320" y="190" key="Vcs.Push.Dialog.v2/0.0.1440.900@0.0.1440.900" timestamp="1585057438560" />
     <state x="399" y="282" key="com.intellij.ide.util.TipDialog" timestamp="1584979453183">
       <screen x="0" y="0" width="1440" height="900" />
@@ -309,10 +313,10 @@
     </state>
     <state x="394" y="-631" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1589386113667" />
     <state x="509" y="374" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1440.900@0.0.1440.900" timestamp="1585056542587" />
-    <state x="230" y="-832" width="890" height="584" key="find.popup" timestamp="1593508855454">
+    <state x="230" y="-832" width="890" height="584" key="find.popup" timestamp="1593509665012">
       <screen x="-285" y="-1080" width="1920" height="1080" />
     </state>
-    <state x="230" y="-832" width="890" height="584" key="find.popup/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1593508855454" />
+    <state x="230" y="-832" width="890" height="584" key="find.popup/0.0.1440.900/-285.-1080.1920.1080@-285.-1080.1920.1080" timestamp="1593509665012" />
     <state x="386" y="207" width="667" height="486" key="find.popup/0.0.1440.900@0.0.1440.900" timestamp="1585057428401" />
     <state x="385" y="196" width="670" height="676" key="search.everywhere.popup" timestamp="1585056555961">
       <screen x="0" y="0" width="1440" height="900" />
