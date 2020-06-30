@@ -184,10 +184,12 @@ class FlutterHealth {
     return allData;
   }
 
-  static Future<List<GFHealthData>> getGFAllDataWithoutSteps(DateTime startDate, DateTime endDate) async {
+  static Future<List<GFHealthData>> getGFAllDataWithoutStepsAndCalories(DateTime startDate, DateTime endDate) async {
     List<GFHealthData> allData = new List<GFHealthData>();
-    for (int i = 0; i < GFDataTypeWithoutSteps.values.length; i++) {
-      allData.addAll(await getGFHealthData(startDate, endDate, i));
+    for (int i = 0; i < GFDataType.values.length; i++) {
+      if (i != GFDataType.values.indexOf(GFDataType.CALORIES) && i != GFDataType.values.indexOf(GFDataType.STEPS)) {
+        allData.addAll(await getGFHealthData(startDate, endDate, i));
+      }
     }
     return allData;
   }
@@ -199,7 +201,6 @@ class FlutterHealth {
     }
     return allData;
   }
-
 
   static Future<List<HKHealthData>> getHKAllDataWithCombinedBP(DateTime startDate, DateTime endDate) async {
     List<HKHealthData> allData = new List<HKHealthData>();
@@ -227,7 +228,8 @@ class FlutterHealth {
     return allData;
   }
 
-  static Future<List<HKHealthData>> getHKAllDataWithCombinedBPWithSpecificDataTypes(DateTime startDate, DateTime endDate, List<HKDataType> list) async {
+  static Future<List<HKHealthData>> getHKAllDataWithCombinedBPWithSpecificDataTypes(
+      DateTime startDate, DateTime endDate, List<HKDataType> list) async {
     List<HKHealthData> allData = new List<HKHealthData>();
     List<HKHealthData> bpRecords = [];
     for (int i = 0; i < list.length; i++) {
@@ -358,7 +360,7 @@ class GFHealthData {
   String unit;
   int dateFrom;
   int dateTo;
-  GFDataTypeWithoutSteps dataType;
+  GFDataType dataType;
 
   GFHealthData({this.value, this.unit, this.dateFrom, this.dateTo, this.dataType});
 
@@ -368,7 +370,7 @@ class GFHealthData {
     unit = json['unit'];
     dateFrom = json['date_from'];
     dateTo = json['date_to'];
-    dataType = GFDataTypeWithoutSteps.values[json['data_type_index']];
+    dataType = GFDataType.values[json['data_type_index']];
   }
 
   Map<String, dynamic> toJson() {
@@ -378,7 +380,7 @@ class GFHealthData {
     data['unit'] = this.unit;
     data['date_from'] = this.dateFrom;
     data['date_to'] = this.dateTo;
-    data['data_type_index'] = GFDataTypeWithoutSteps.values.indexOf(this.dataType);
+    data['data_type_index'] = GFDataType.values.indexOf(this.dataType);
     return data;
   }
 }
@@ -410,16 +412,6 @@ enum GFDataType {
   HEIGHT,
   STEPS,
   CALORIES,
-  HEART_RATE,
-  BODY_TEMPERATURE,
-  BLOOD_PRESSURE,
-  BLOOD_OXYGEN,
-  BLOOD_GLUCOSE,
-  WEIGHT,
-}
-
-enum GFDataTypeWithoutSteps {
-  HEIGHT,
   HEART_RATE,
   BODY_TEMPERATURE,
   BLOOD_PRESSURE,
