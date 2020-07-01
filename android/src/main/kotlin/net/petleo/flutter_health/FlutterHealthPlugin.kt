@@ -85,7 +85,6 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
             .addDataType(DataType.TYPE_HEIGHT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_WEIGHT, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_CALORIES_EXPENDED, FitnessOptions.ACCESS_READ)
-            .addDataType(DataType.TYPE_STEP_COUNT_DELTA, FitnessOptions.ACCESS_READ)
             .addDataType(DataType.TYPE_HEART_RATE_BPM, FitnessOptions.ACCESS_READ)
             .addDataType(HealthDataTypes.TYPE_BODY_TEMPERATURE, FitnessOptions.ACCESS_READ)
             .addDataType(HealthDataTypes.TYPE_BLOOD_PRESSURE, FitnessOptions.ACCESS_READ)
@@ -97,13 +96,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
     override fun onMethodCall(call: MethodCall, result: Result) {
         if (call.method == "requestAuthorization") {
             mResult = result
-//
-//            if (ContextCompat.checkSelfPermission(thisActivity, Manifest.permission.ACTIVITY_RECOGNITION)
-//                    != PackageManager.PERMISSION_GRANTED) {
-//                ActivityCompat.requestPermissions(thisActivity,
-//                        arrayOf(Manifest.permission.ACTIVITY_RECOGNITION),
-//                        MY_PERMISSIONS_REQUEST_ACTIVITY_RECOGNITION);
-//            }
+
             if (!GoogleSignIn.hasPermissions(GoogleSignIn.getLastSignedInAccount(activity), fitnessOptions)) {
                 Log.d("authResult 111", activity.localClassName)
                 GoogleSignIn.requestPermissions(
@@ -119,14 +112,14 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
             val type = call.argument<Int>("index")
             val startTime = call.argument<Long>("startDate")
             val endTime = call.argument<Long>("endDate")
-            val fields = listOf(Field.FIELD_PERCENTAGE, Field.FIELD_HEIGHT, Field.FIELD_CALORIES, Field.FIELD_BPM, HealthFields.FIELD_BODY_TEMPERATURE, HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC, HealthFields.FIELD_OXYGEN_SATURATION, HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL, Field.FIELD_WEIGHT)
+            val fields = listOf(Field.FIELD_PERCENTAGE, Field.FIELD_HEIGHT, Field.FIELD_CALORIES,Field.FIELD_CALORIES, Field.FIELD_BPM, HealthFields.FIELD_BODY_TEMPERATURE, HealthFields.FIELD_BLOOD_PRESSURE_SYSTOLIC, HealthFields.FIELD_OXYGEN_SATURATION, HealthFields.FIELD_BLOOD_GLUCOSE_LEVEL, Field.FIELD_WEIGHT)
             Log.d("type is ", type.toString())
 
             val dataType = when (type) {
                 0 -> DataType.TYPE_BODY_FAT_PERCENTAGE
                 1 -> DataType.TYPE_HEIGHT
                 2 -> DataType.TYPE_CALORIES_EXPENDED
-                3 -> DataType.TYPE_STEP_COUNT_DELTA
+                3 -> DataType.TYPE_CALORIES_EXPENDED
                 4 -> DataType.TYPE_HEART_RATE_BPM
                 5 -> HealthDataTypes.TYPE_BODY_TEMPERATURE
                 6 -> HealthDataTypes.TYPE_BLOOD_PRESSURE
@@ -136,6 +129,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                 else -> DataType.TYPE_WEIGHT
             }
             thread {
+
                 val gsa = GoogleSignIn.getAccountForExtension(activity.applicationContext, fitnessOptions)
                 val response = Fitness.getHistoryClient(activity.applicationContext, gsa)
                         .readData(DataReadRequest.Builder()
@@ -162,7 +156,7 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                             }
                         }
                     }
-                    if (dataType == HealthDataTypes.TYPE_BLOOD_PRESSURE)
+                    if (dataType == HealthDataTypes.TYPE_BLOOD_PRESSURE){
                         map["value2"] = try {
                             it.getValue(HealthFields.FIELD_BLOOD_PRESSURE_DIASTOLIC).asFloat()
                         } catch (e1: Exception) {
@@ -172,10 +166,13 @@ class FlutterHealthPlugin(val activity: Activity, val channel: MethodChannel) : 
                                 try {
                                     it.getValue(fields[type ?: 0]).asString()
                                 } catch (e3: Exception) {
-                                    Log.e("FLUTTER_HEALTH::ERROR", e3.toString())
+                                    Log.e("FLUTTER_HEALTH::ERROR_BLOOD_PRESSURE", e3.toString())
                                 }
                             }
                         }
+                    }
+                    Log.d("FLUTTER_HEALTH::BLOOD PRESSURE MAP IS", map.toString())
+
                     map["date_from"] = it.getStartTime(TimeUnit.MILLISECONDS)
                     map["date_to"] = it.getEndTime(TimeUnit.MILLISECONDS)
                     map["unit"] = ""

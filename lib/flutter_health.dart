@@ -169,7 +169,6 @@ class FlutterHealth {
       var gfHealthData = List<GFHealthData>.from(result.map((i) => GFHealthData.fromJson(Map<String, dynamic>.from(i))));
       return gfHealthData;
     } catch (e, s) {
-      print('exception is $e $s');
       return const [];
     }
   }
@@ -259,7 +258,10 @@ class FlutterHealth {
         HKDataType.values.indexOf(HKDataType.HIGH_HEART_RATE_EVENT), HKDataType.values.indexOf(HKDataType.IRREGULAR_HEART_RATE_EVENT));
     List<HKHealthData> bpRecords = [];
     for (int i = 0; i < healthData.length; i++) {
-      if (healthData[i] != HKDataType.STEPS) {
+      if (healthData[i] != HKDataType.STEPS &&
+          healthData[i] != HKDataType.BASAL_ENERGY_BURNED &&
+          healthData[i] != HKDataType.ACTIVE_ENERGY_BURNED &&
+          healthData[i] != HKDataType.WAIST_CIRCUMFERENCE) {
         if (healthData[i] == HKDataType.BLOOD_PRESSURE_SYSTOLIC) {
           bpRecords = await getHKHealthData(startDate, endDate, i);
         } else if (healthData[i] == HKDataType.BLOOD_PRESSURE_DIASTOLIC) {
@@ -282,7 +284,6 @@ class FlutterHealth {
 
   static Future<List<HKHealthData>> getHKHealthData(DateTime startDate, DateTime endDate, int type) async {
     Map<String, dynamic> args = {};
-    print('type is $type');
     args.putIfAbsent('index', () => type);
     args.putIfAbsent('startDate', () => startDate.millisecondsSinceEpoch);
     args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
@@ -302,7 +303,6 @@ class FlutterHealth {
     args.putIfAbsent('endDate', () => endDate.millisecondsSinceEpoch);
     try {
       List result = await _channel.invokeMethod('getSummary', args);
-      print('result coming back is $result');
       var hkHealthData = List<HKHealthData>.from(result.map((i) => HKHealthData.fromJson(Map<String, dynamic>.from(i))));
       return hkHealthData;
     } catch (e) {
@@ -402,6 +402,7 @@ enum HKDataType {
   BLOOD_OXYGEN,
   BLOOD_GLUCOSE,
   ELECTRODERMAL_ACTIVITY,
+  BODY_MASS,
   HIGH_HEART_RATE_EVENT,
   LOW_HEART_RATE_EVENT,
   IRREGULAR_HEART_RATE_EVENT,
