@@ -48,7 +48,7 @@ class FlutterHealth {
   }
 
   static Future<List<GFHealthData>> getGFStepCount(DateTime startDate, DateTime endDate) async {
-    return getGFHealthData(startDate, endDate, 4);
+    return getGFHealthData(startDate, endDate, 2);
   }
 
   static Future<List<HKHealthData>> getHKBasalEnergyBurned(DateTime startDate, DateTime endDate) async {
